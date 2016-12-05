@@ -1,0 +1,30 @@
+{% extends "skeleton.twig" %}
+
+{% block title %}Overzicht bestelling{% endblock %}
+
+{% block content %}
+    <h1>Uw bestelling: </h1>
+
+
+
+    <ul>
+        <li>Item1 - prijs - aantal - totaal</li>
+        <li>Item2 - prijs - aantal - totaal</li>
+    </ul>
+    Totaal: totale prijs
+    
+    <form action="order.php">
+        <input type="submit" name="" value="wijzig bestelling">
+    </form>
+    
+    <form action="checkout.php">
+        Kies een datum
+        <input type="date">
+        <input type="submit" name="" value="Bevestig bestelling">
+    </form>
+
+
+
+
+
+{% endblock %}

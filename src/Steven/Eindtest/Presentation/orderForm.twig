@@ -1,0 +1,47 @@
+{% extends "skeleton.twig" %}
+
+{% block title %}Bestellen{% endblock %}
+
+{% block content %}
+    <h1>Bestellen: </h1>
+
+    {% for cartline in cartlines %}
+        <ul>
+            <li>
+                {{ cartline.product.name }} - {{ cartline.product.price }} - {{ cartline.product.price * cartline.amount }}
+            </li>
+        </ul>
+    {% endfor %}
+
+    <ul>
+        <li>
+            Item 1 - aantal - wijzig - verwijder
+        </li>
+        <li>
+            Item 2 - aantal - wijzig - verwijder
+        </li>
+    </ul>
+    <form name="orderForm" action="order.php" method="post">
+        <select name="product">
+
+            <option selected disabled>Kies een product...</option>
+
+            <option value="1">
+                Product 1 (prijs)
+            </option>
+            <option value="2">
+                Product2 (prijs)
+            </option>
+        </select>
+        <input type="number" name="amount" placeholder="aantal">
+        <input type="submit" name="orderAdd" value="Toevoegen">
+    </form>
+    <form name="checkout" action="checkout.php" method="post">
+        <input type="submit" name="orderSubmit" value="Afrekenen">
+    </form>
+
+
+
+
+
+{% endblock %}

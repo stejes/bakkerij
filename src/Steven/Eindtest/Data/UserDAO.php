@@ -1,0 +1,62 @@
+<?php
+
+namespace Steven\Eindtest\Data;
+
+use Steven\Eindtest\Entities\User;
+use Steven\Eindtest\Exceptions\CustomerExistsException;
+use PDO;
+
+class UserDAO {
+
+    public function create($email, $name, $firstname, $address, $cityId, $password) {
+        $existingCustomer = $this->getByEmail($email);
+        if (!is_null($existingCustomer)) {
+            throw new CustomerExistsException();
+        } else {
+            $sql = "insert into customers (name, firstname, address, cityId, email, password, isBlocked) values (:name, :firstname, :address, :cityId, :email, :password, 0)";
+            $dbh = new PDO(DBConfig::$DB_CONNSTRING, DBConfig::$DB_USERNAME, DBConfig::$DB_PASSWORD);
+            $stmt = $dbh->prepare($sql);
+            $stmt->execute(array(':name' => $name, ':firstname' => $firstname, ":address" => $address, ":cityId" => $cityId, ":email" => $email, ":password" => $password));
+            $userId = $dbh->lastInsertId();
+            $dbh = null;
+            $cityDAO = new CityDAO();
+            $city = $cityDAO->getById($cityId);
+            $user = User::create($userId, $name, $firstname, $address, $city, $email, $password, 0);
+            return $user;
+        }
+    }
+
+    public function getByEmail($email) {
+        $sql = "select id, name, firstname, address, cityId, email, password, isBlocked from customers where email = :email";
+        $dbh = new PDO(DBConfig::$DB_CONNSTRING, DBConfig::$DB_USERNAME, DBConfig::$DB_PASSWORD);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute(array(':email' => $email));
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $dbh = null;
+        if (!$row) {
+
+            return null;
+        }
+        $cityDAO = new CityDAO();
+        $city = $cityDAO->getById($row["cityId"]);
+        $user = User::create($row["id"], $row["name"], $row["firstname"], $row["address"], $city, $row["email"], $row["password"], $row["isBlocked"]);
+        /* print_r($user);
+          print 'id: ' . $user->getId(); */
+        return $user;
+    }
+
+    public function isValidUser($email, $password) {
+        $sql = "select email from customers where email = :email and password = :password";
+        $dbh = new PDO(DBConfig::$DB_CONNSTRING, DBConfig::$DB_USERNAME, DBConfig::$DB_PASSWORD);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute(array(':email' => $email, ':password' => $password));
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $dbh = null;
+        if ($row) {
+
+            return true;
+        }
+        return false;
+    }
+
+}

@@ -1,0 +1,28 @@
+{% extends "skeleton.twig" %}
+
+{% block title %}Index{% endblock %}
+
+{% block content %}
+    {{ email }} - {{ password }}
+    
+    <form name="loginForm" action="login.php" method="post">
+        <input type="text" name="email" placeholder="email">
+        <input type="password" name="password" placeholder="wachtwoord">
+        <input type="submit" name="loginSubmit" value="login">
+    </form>
+
+    <form name="registerForm" action="login.php" method="post">
+        <input type="text" name="email" placeholder="email">
+        <input type="text" name="name" placeholder="familienaam">
+        <input type="text" name="firstname" placeholder="voornaam">
+        <input type="text" name="address" placeholder="adres">
+        <select name="city">
+            <option disabled selected>Selecteer gemeente...</option>
+            {% for city in cityList %}
+            <option value="{{ city.id }}">{{ city.zipcode }} - {{ city.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" name="registerSubmit" value="registreren">
+
+    </form>
+{% endblock %}

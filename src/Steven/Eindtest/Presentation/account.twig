@@ -1,0 +1,34 @@
+{% extends "skeleton.twig" %}
+
+{% block title %}Account{% endblock %}
+
+{% block content %}
+    <h1>Mijn gegevens: </h1>
+
+
+
+    Email: bla@bla.com
+    <form name="orderForm" action="order.php" method="post">
+        <input type="text" name="firstname" placeholder="voornaam">
+        <input type="text" name="name" placeholder="achternaam">
+        <input type="text" name="adress" placeholder="adres">
+            <select name="city">
+
+                <option selected disabled>Woonplaats...</option>
+                {% for city in cityList %}
+                    <option value="{{ city.id }}">
+                        {{city.postcode}}, {{ city.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            <input type="password" name="password" placeholder="Oud Wachtwoord">
+            <input type="password" name="password" placeholder="Nieuw Wachtwoord">
+            <input type="password" name="password2" placeholder="Bevestig wachtwoord">
+        <input type="submit" name="accountSubmit" value="Toevoegen">
+    </form>
+
+
+
+
+
+{% endblock %}
