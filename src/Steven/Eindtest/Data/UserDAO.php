@@ -4,14 +4,19 @@ namespace Steven\Eindtest\Data;
 
 use Steven\Eindtest\Entities\User;
 use Steven\Eindtest\Exceptions\CustomerExistsException;
+use Steven\Eindtest\Exceptions\LoginFailedException;
 use PDO;
 
 class UserDAO {
 
     public function create($email, $name, $firstname, $address, $cityId, $password) {
         $existingCustomer = $this->getByEmail($email);
+        $cityDao = new CityDAO();
+        $city = $cityDao->getById($cityId);
         if (!is_null($existingCustomer)) {
             throw new CustomerExistsException();
+        } else if(is_null($city)){
+            throw new NonExistingCityException();
         } else {
             $sql = "insert into customers (name, firstname, address, cityId, email, password, isBlocked) values (:name, :firstname, :address, :cityId, :email, :password, 0)";
             $dbh = new PDO(DBConfig::$DB_CONNSTRING, DBConfig::$DB_USERNAME, DBConfig::$DB_PASSWORD);
@@ -54,8 +59,10 @@ class UserDAO {
         $dbh = null;
         if ($row) {
             return true;
+        }else{
+            throw new LoginFailedException();
         }
-        return false;
+        
     }
     
     public function update($user){

@@ -24,7 +24,7 @@ if (isset($_SESSION["email"])) {
     $view = $twig->render("account.twig", array("user" => $user, "cityList" => $cityList, "isLoggedIn" => $isLoggedIn));
     print($view);
 } else {
-    header:("location: login.php");
+    header("location: login.php");
     exit(0);
 }
 

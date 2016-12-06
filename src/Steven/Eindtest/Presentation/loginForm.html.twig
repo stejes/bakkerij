@@ -3,8 +3,10 @@
 {% block title %}Index{% endblock %}
 
 {% block content %}
-    {{ email }} - {{ password }}
-    
+    <!--{{ email }} - {{ password }}-->
+    {% if error == "loginfailed" %}
+        <h3>Foute inloggegevens</h3>
+    {% endif %}
     <form name="loginForm" action="login.php" method="post">
         <input type="text" name="email" placeholder="email" required>
         <input type="password" name="password" placeholder="wachtwoord" required>
