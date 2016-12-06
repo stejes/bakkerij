@@ -4,10 +4,12 @@ session_start();
 require_once 'bootstrap.php';
 
 use Steven\Eindtest\Business\OrderService;
+$isLoggedIn = false;
 //print "blabla";
 
 if (isset($_SESSION["email"])) {
-
+    $cart = null;
+    $isLoggedIn = true;
     if (isset($_SESSION["cart"])) {
         $cart = unserialize($_SESSION["cart"]);
         if (isset($_POST["confirmSubmit"])) {
@@ -17,10 +19,9 @@ if (isset($_SESSION["email"])) {
             header("location: orders.php");
             exit(0);
         }
-        $view = $twig->render("checkout.twig", array("cart" => $cart));
-    } else {
-        $view = $twig->render("checkout.twig", array());
     }
+    $view = $twig->render("checkout.twig", array("cart" => $cart, "isLoggedIn" => $isLoggedIn));
+
     print($view);
 } else {
     header("location: login.php");

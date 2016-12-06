@@ -28,7 +28,7 @@
                                 <a href="account.php">Account</a>
                             </li>
                             <li>
-                                {% if username == "" %}
+                                {% if not isLoggedIn %}
                                     <a href="login.php">Login</a>
                                 {% else %}
                                     <a href="login.php?action=logout">Logout</a>

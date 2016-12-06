@@ -9,4 +9,10 @@ class ProductService {
         $product = $productDao->getById($id);
         return $product;
     }
+    
+    public function getAll(){
+        $productDao = new ProductDAO();
+        $productList = $productDao->getAll();
+        return $productList;
+    }
 }

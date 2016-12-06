@@ -7,8 +7,9 @@ use Steven\Eindtest\Business\UserService;
 use Steven\Eindtest\Business\CityService;
 
 //print "blabla";
-
+$isLoggedIn = false;
 if (isset($_SESSION["email"])) {
+    $isLoggedIn = true;
     $citySvc = new CityService();
     $cityList = $citySvc->getAll();
     $userSvc = new UserService();
@@ -20,7 +21,7 @@ if (isset($_SESSION["email"])) {
     } else if (isset($_POST["passwordSubmit"])) {
         $userSvc->editPassword($_SESSION["email"], $_POST["oldpassword"], $_POST["password"], $_POST["password2"]);
     }
-    $view = $twig->render("account.twig", array("user" => $user, "cityList" => $cityList));
+    $view = $twig->render("account.twig", array("user" => $user, "cityList" => $cityList, "isLoggedIn" => $isLoggedIn));
     print($view);
 } else {
     header:("location: login.php");

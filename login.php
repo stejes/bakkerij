@@ -11,7 +11,7 @@ use Steven\Eindtest\Exceptions\CustomerExistsException;
 
 $citySvc = new CityService();
 $cityList = $citySvc->getAll();
-
+$isLoggedIn = false;
 if (isset($_POST["registerSubmit"])) {
     print "register";
     try {
@@ -38,8 +38,14 @@ if (isset($_POST["registerSubmit"])) {
             exit(0);
         }
     }
+}else if(isset($_GET["action"]) && $_GET["action"] == "logout"){
+   session_unset();
+}
+
+if(isset($_SESSION["email"])){
+    $isLoggedIn = true;
 }
 //$view = $twig->render("loginForm.html.twig", array("cityList" => $cityList, "email" => $_POST["email"], "password" => $passwordString));
-$view = $twig->render("loginForm.html.twig", array("cityList" => $cityList));
+$view = $twig->render("loginForm.html.twig", array("cityList" => $cityList, "isLoggedIn" => $isLoggedIn));
 print($view);
 

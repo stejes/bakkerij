@@ -4,12 +4,12 @@
 
 {% block content %}
     <h1>Bestellen: </h1>
-{% set total = 0 %}
+    {% set total = 0 %}
     {% for cartline in cart.cart %}
         <ul>
             <li>
                 {{ cartline.product.name }} - {{ cartline.amount}} * {{ cartline.product.price }} - {{ cartline.product.price * cartline.amount }}
-                 {% set total = total + cartline.product.price * cartline.amount %}
+                {% set total = total + cartline.product.price * cartline.amount %}
             </li>
         </ul>
     {% endfor %}
@@ -27,15 +27,14 @@
         <select name="product">
 
             <option selected disabled>Kies een product...</option>
+            {% for product in productList %}
+                <option value="{{product.id}}">
+                    {{product.name}}-{{product.price}}€
+                </option>
+            {% endfor %}
 
-            <option value="1">
-                Product 1 (prijs)
-            </option>
-            <option value="2">
-                Product2 (prijs)
-            </option>
         </select>
-        <input type="number" name="amount" placeholder="aantal">
+        <input type="number" name="amount" value="0">
         <input type="submit" name="orderAdd" value="Toevoegen">
     </form>
     <form name="checkout" action="checkout.php" method="post">

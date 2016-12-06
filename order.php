@@ -9,13 +9,17 @@ use Steven\Eindtest\Entities\Cartline;
 
 session_start();
 //print "blabla";
+$isLoggedIn = false;
 if (isset($_SESSION["email"])) {
-
+    $cart = null;
+    $isLoggedIn = true;
+    $productSvc = new ProductService();
+    $productList = $productSvc->getAll();
     if(isset($_POST["cancelSubmit"])){
         unset($_SESSION["cart"]);
     }
     if (isset($_POST["orderAdd"])) {
-        $productSvc = new ProductService();
+        
         $product = $productSvc->getById($_POST["product"]);
         $amount = $_POST["amount"];
         /*print "<br>";
@@ -36,10 +40,9 @@ if (isset($_SESSION["email"])) {
 
         //$_SESSION["cart"] = serialize($cart);
         //print_r($cart);
-        $view = $twig->render("orderForm.twig", array("cart" => $cart));
-    } else {
-        $view = $twig->render("orderForm.twig", array());
-    }
+        
+    } 
+    $view = $twig->render("orderForm.twig", array("cart" => $cart, "productList"=>$productList, "isLoggedIn" => $isLoggedIn));
 
     print($view);
 } else {
