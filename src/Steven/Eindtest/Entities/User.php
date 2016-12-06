@@ -58,6 +58,37 @@ class User {
     function getIsBlocked() {
         return $this->isBlocked;
     }
+    function getPassword() {
+        print "in setpass";
+        return $this->password;
+    }
+
+        
+    function setName($name) {
+        $this->name = $name;
+    }
+
+    function setFirstname($firstname) {
+        $this->firstname = $firstname;
+    }
+
+    function setAddress($address) {
+        $this->address = $address;
+    }
+
+    function setCity($city) {
+        $this->city = $city;
+    }
+
+    function setEmail($email) {
+        $this->email = $email;
+    }
+
+    function setPassword($password) {
+        $this->password = $password;
+    }
+
+
 
 
 

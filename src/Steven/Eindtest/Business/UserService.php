@@ -10,6 +10,7 @@ namespace Steven\Eindtest\Business;
 
 use Steven\Eindtest\Exceptions\EmptyFieldsException;
 use Steven\Eindtest\Data\UserDAO;
+use Steven\Eindtest\Data\CityDAO;
 
 /**
  * Description of UserService
@@ -44,6 +45,7 @@ class UserService {
     public function checkLogin($email, $password){
         $userDao = new UserDAO();
         //print "user" . $user;
+        //print "passding: " . sha1($password);
         if($userDao->isValidUser($email, sha1($password))){
             return true;
         }
@@ -53,6 +55,28 @@ class UserService {
     public function getByEmail($email){
         $userDao = new UserDAO();
         return $userDao->getByEmail($email);
+    }
+    
+    public function editData($email, $firstname, $name, $address, $cityId){
+        $userDao = new UserDAO();
+        $user = $userDao->getByEmail($email);
+        $user->setFirstname($firstname);
+        $user->setName($name);
+        $user->setAddress($address);
+        $cityDao = new CityDAO();
+        $city = $cityDao->getById($cityId);
+        $user->setCity($city);
+        $userDao->update($user);
+        
+    }
+    
+    public function editPassword($email, $oldpassword, $password, $password2){
+        if($password == $password2){
+            $userDao = new UserDao();
+            $user = $userDao->getByEmail($email);
+            $user->setPassword(sha1($password));
+            $userDao->updatePass($user);
+        }
     }
 
 }

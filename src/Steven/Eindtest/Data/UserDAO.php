@@ -53,10 +53,25 @@ class UserDAO {
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $dbh = null;
         if ($row) {
-
             return true;
         }
         return false;
+    }
+    
+    public function update($user){
+        $sql = "update customers set name = :name, firstname = :firstname, address  = :address, cityId  =:cityId where id = :id";
+        $dbh = new PDO(DBConfig::$DB_CONNSTRING, DBConfig::$DB_USERNAME, DBConfig::$DB_PASSWORD);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute(array(":name" => $user->getName(), ":firstname" => $user->getFirstname(), ":address" => $user->getAddress(),":cityId" => $user->getCity()->getId(), ":id" => $user->getId()));
+        $dbh = null;
+    }
+    
+    public function updatePass($user){
+        $sql = "update customers set password = :password where id = :id";
+        $dbh = new PDO(DBConfig::$DB_CONNSTRING, DBConfig::$DB_USERNAME, DBConfig::$DB_PASSWORD);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute(array(":password" => $user->getPassword(), ":id" => $user->getId()));
+        $dbh = null;
     }
 
 }

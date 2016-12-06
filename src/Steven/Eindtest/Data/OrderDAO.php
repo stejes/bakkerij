@@ -31,7 +31,7 @@ class OrderDAO {
     }
 
     public function getByUserId($customerId) {
-        $sql = "select id, customer_id, pick_up_date from orders where customer_id = :customerId";
+        $sql = "select id, customer_id, pick_up_date from orders where customer_id = :customerId order by pick_up_date";
         $dbh = new PDO(DBConfig::$DB_CONNSTRING, DBConfig::$DB_USERNAME, DBConfig::$DB_PASSWORD);
         $stmt = $dbh->prepare($sql);
         $stmt->execute(array(':customerId' => $customerId));

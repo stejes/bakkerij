@@ -7,24 +7,33 @@
 
 
 
-    Email: bla@bla.com
-    <form name="orderForm" action="order.php" method="post">
-        <input type="text" name="firstname" placeholder="voornaam">
-        <input type="text" name="name" placeholder="achternaam">
-        <input type="text" name="adress" placeholder="adres">
-            <select name="city">
+    
+    <form name="accountForm" action="account.php" method="post">
+        <input type="text" name="firstname" placeholder="voornaam" value="{{ user.firstname }}">
+        <input type="text" name="name" placeholder="achternaam" value="{{ user.name }}">
+        <input type="text" name="address" placeholder="adres" value="{{ user.address }}">
+        <select name="city">
 
-                <option selected disabled>Woonplaats...</option>
-                {% for city in cityList %}
-                    <option value="{{ city.id }}">
-                        {{city.postcode}}, {{ city.name }}
-                    </option>
-                {% endfor %}
-            </select>
-            <input type="password" name="password" placeholder="Oud Wachtwoord">
-            <input type="password" name="password" placeholder="Nieuw Wachtwoord">
-            <input type="password" name="password2" placeholder="Bevestig wachtwoord">
-        <input type="submit" name="accountSubmit" value="Toevoegen">
+            <option selected disabled>Woonplaats...</option>
+
+            {% for city in cityList %}
+                {% set selected ="" %}
+                {% if user.city.zipcode == city.zipcode %}
+                    {% set selected = "selected" %}
+                {% endif %}
+                <option value="{{ city.id }}" {{ selected }}>
+                    {{city.zipcode}}, {{ city.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <input type="submit" name="accountSubmit" value="Wijzigen">
+    </form>
+    <form name="passwordForm" action="account.php" method="post">
+        <input type="password" name="oldpassword" placeholder="Oud Wachtwoord">
+        <input type="password" name="password" placeholder="Nieuw Wachtwoord">
+        <input type="password" name="password2" placeholder="Bevestig wachtwoord">
+        <input type="submit" name="passwordSubmit" value="Wijzigen">
     </form>
 
 

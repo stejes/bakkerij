@@ -4,13 +4,13 @@ session_start();
 require_once 'bootstrap.php';
 
 //print "blabla";
-use Steven\Eindtest\Data\CityDAO;
+use Steven\Eindtest\Business\CityService;
 use Steven\Eindtest\Business\UserService;
 use Steven\Eindtest\Exceptions\EmptyFieldsException;
 use Steven\Eindtest\Exceptions\CustomerExistsException;
 
-$cityDao = new CityDAO();
-$cityList = $cityDao->getAll();
+$citySvc = new CityService();
+$cityList = $citySvc->getAll();
 
 if (isset($_POST["registerSubmit"])) {
     print "register";
@@ -31,7 +31,7 @@ if (isset($_POST["registerSubmit"])) {
         $userSvc = new UserService();
         $isValid = $userSvc->checkLogin($_POST["email"], $_POST["password"]);
         print "in tweede if";
-        print_r($isValid);
+        print $isValid;
         if ($isValid) {
             $_SESSION["email"] = $_POST["email"];
             header("location: order.php");
