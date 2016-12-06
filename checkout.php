@@ -13,6 +13,7 @@ if (isset($_SESSION["email"])) {
         if (isset($_POST["confirmSubmit"])) {
             $orderSvc = new OrderService();
             $orderSvc->confirm($cart, $_SESSION["email"], $_POST["date"]);
+            unset($_SESSION["cart"]);
             header("location: orders.php");
             exit(0);
         }

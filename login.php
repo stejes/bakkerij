@@ -3,7 +3,7 @@
 session_start();
 require_once 'bootstrap.php';
 
-print "blabla";
+//print "blabla";
 use Steven\Eindtest\Data\CityDAO;
 use Steven\Eindtest\Business\UserService;
 use Steven\Eindtest\Exceptions\EmptyFieldsException;

@@ -13,4 +13,13 @@ class OrderService {
         $userId = $userSvc->getByEmail($email)->getId();
         $orderDao->add($cartlines, $userId, $date);
     }
+    
+    public function getOrders($email){
+        $userSvc = new UserService();
+        $userId = $userSvc->getByEmail($email)->getId();
+        //print $userId;
+        $orderDao = new OrderDAO();
+        $orderList = $orderDao->getByUserId($userId);
+        return $orderList;
+    }
 }
