@@ -4,14 +4,18 @@
 
 {% block content %}
     <h1>Uw bestelling: </h1>
+    {% set total = 0 %}
+    {% for cartline in cart.cart %}
+        <ul>
+            <li>
+                {{ cartline.product.name }} - {{ cartline.amount}} * {{ cartline.product.price }} - {{ cartline.product.price * cartline.amount }}
+                {% set total = total + cartline.product.price * cartline.amount %}
+            </li>
+        </ul>
+    {% endfor %}
 
-
-
-    <ul>
-        <li>Item1 - prijs - aantal - totaal</li>
-        <li>Item2 - prijs - aantal - totaal</li>
-    </ul>
-    Totaal: totale prijs
+    
+    Totaal: {{ total }}
     
     <form action="order.php">
         <input type="submit" name="" value="wijzig bestelling">
@@ -20,7 +24,7 @@
     <form action="checkout.php">
         Kies een datum
         <input type="date">
-        <input type="submit" name="" value="Bevestig bestelling">
+        <input type="submit" name="confirmSubmit" value="Bevestig bestelling">
     </form>
 
 

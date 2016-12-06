@@ -15,7 +15,7 @@ class ProductDAO {
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $product = Product::create($row["id"], $row["name"], $row["price"]);
         $dbh = null;
-        print_r($product);
+        //print_r($product);
         return $product;
     }
 
