@@ -49,5 +49,10 @@ class UserService {
         }
         return false;
     }
+    
+    public function getByEmail($email){
+        $userDao = new UserDAO();
+        return $userDao->getByEmail($email);
+    }
 
 }

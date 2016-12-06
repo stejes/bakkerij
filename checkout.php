@@ -2,6 +2,8 @@
 
 session_start();
 require_once 'bootstrap.php';
+
+use Steven\Eindtest\Business\OrderService;
 //print "blabla";
 
 if (isset($_SESSION["email"])) {
@@ -10,7 +12,7 @@ if (isset($_SESSION["email"])) {
         $cart = unserialize($_SESSION["cart"]);
         if (isset($_POST["confirmSubmit"])) {
             $orderSvc = new OrderService();
-            $orderSvc->confirm($cart);
+            $orderSvc->confirm($cart, $_SESSION["email"], $_POST["date"]);
             header("location: orders.php");
             exit(0);
         }

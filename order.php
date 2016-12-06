@@ -11,7 +11,9 @@ session_start();
 //print "blabla";
 if (isset($_SESSION["email"])) {
 
-    
+    if(isset($_POST["cancelSubmit"])){
+        unset($_SESSION["cart"]);
+    }
     if (isset($_POST["orderAdd"])) {
         $productSvc = new ProductService();
         $product = $productSvc->getById($_POST["product"]);

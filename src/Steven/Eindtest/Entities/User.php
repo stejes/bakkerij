@@ -30,5 +30,35 @@ class User {
         }
         return self::$idMap[$id];
     }
+    
+    function getId() {
+        return $this->id;
+    }
+
+    function getName() {
+        return $this->name;
+    }
+
+    function getFirstname() {
+        return $this->firstname;
+    }
+
+    function getAddress() {
+        return $this->address;
+    }
+
+    function getCity() {
+        return $this->city;
+    }
+
+    function getEmail() {
+        return $this->email;
+    }
+
+    function getIsBlocked() {
+        return $this->isBlocked;
+    }
+
+
 
 }
