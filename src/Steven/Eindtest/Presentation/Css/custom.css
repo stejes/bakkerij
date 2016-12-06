@@ -1,0 +1,38 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Dec 6, 2016, 7:59:58 PM
+    Author     : manj
+*/
+html{
+    position: relative;
+    min-height: 100%;
+}
+
+body{
+    padding-bottom: 60px;
+    
+    
+}
+
+input[type="number"]{
+    width: 20%;
+}
+
+form{
+    margin-bottom: 5em;
+}
+
+footer{
+    position: absolute;
+    bottom: 0;
+    height: 60px;
+    width: 100%;
+    clear: both;
+    background: #f8f8f8;
+}
+
+

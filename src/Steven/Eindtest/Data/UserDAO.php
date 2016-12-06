@@ -27,6 +27,10 @@ class UserDAO {
             $cityDAO = new CityDAO();
             $city = $cityDAO->getById($cityId);
             $user = User::create($userId, $name, $firstname, $address, $city, $email, $password, 0);
+            $newUser = $this->getByEmail($email);
+            if(is_null($newUser)){
+                return null;
+            }
             return $user;
         }
     }

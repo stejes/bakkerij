@@ -16,6 +16,11 @@
             </ul>
         {% endfor %}
         Voorlopig totaal: {{ total }}
+        <div>
+            <form name="cancel" action="order.php" method="post">
+                <button type="submit" name="cancelSubmit" class="btn btn-default">Alles wissen</button>
+            </form>
+        </div>
 
     {% else %}
         Nog geen producten in winkelmandje.
@@ -29,26 +34,27 @@
             Item 2 - aantal - wijzig - verwijder
         </li>
     </ul>-->
-    <form name="orderForm" action="order.php" method="post">
-        <select name="product">
+    <form class="form-inline" name="orderForm" action="order.php" method="post">
+        <div class="form-group">
+            <input type="number" name="amount" value="1" min="1" class="form-control">
+            <select name="product" class="form-control">
 
-            <option selected disabled>Kies een product...</option>
-            {% for product in productList %}
-                <option value="{{product.id}}">
-                    {{product.name}}-{{product.price}}€
-                </option>
-            {% endfor %}
+                <option selected disabled>Kies een product...</option>
+                {% for product in productList %}
+                    <option value="{{product.id}}">
+                        {{product.name}}-{{product.price}}€
+                    </option>
+                {% endfor %}
 
-        </select>
-        <input type="number" name="amount" value="0">
-        <input type="submit" name="orderAdd" value="Toevoegen">
+            </select>
+            
+        </div>
+                <button type="submit" name="orderAdd" class="btn btn-default">Toevoegen</button>
     </form>
     <form name="checkout" action="checkout.php" method="post">
-        <input type="submit" name="orderSubmit" value="Bestellen">
+        <button type="submit" name="orderSubmit" class="btn btn-default">Bevestigen</button>
     </form>
-    <form name="cancel" action="order.php" method="post">
-        <input type="submit" name="cancelSubmit" value="Opnieuw beginnen">
-    </form>
+
 
 
 

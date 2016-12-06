@@ -5,35 +5,61 @@
 {% block content %}
     <h1>Mijn gegevens: </h1>
 
+    {% if not password == null %}
+        Je voorlopige paswoord is {{ password }}. Wijzig dit nu!
+    {% endif %}
 
 
-    
-    <form name="accountForm" action="account.php" method="post">
-        <input type="text" name="firstname" placeholder="voornaam" value="{{ user.firstname }}">
-        <input type="text" name="name" placeholder="achternaam" value="{{ user.name }}">
-        <input type="text" name="address" placeholder="adres" value="{{ user.address }}">
-        <select name="city">
+    <form class="" name="accountForm" action="account.php" method="post">
+        <div class="form-group">
+            <label class="control-label" for="email">Email: </label>
+            
+                <p class="form-control-static" id="email" >{{user.email}}</p>
+            
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="firstname">Voornaam: </label>
+            <input type="text" name="firstname" id="firstname" placeholder="voornaam" value="{{ user.firstname }}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="name">Familienaam: </label>
+            <input type="text" name="name" id="name" placeholder="achternaam" value="{{ user.name }}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="address">Adres: </label>
+            <input type="text" name="address" id="address" placeholder="adres" value="{{ user.address }}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="city">Gemeente: </label>
+            <select name="city" id="city" class="form-control">
 
-            <option selected disabled>Woonplaats...</option>
+                <option selected disabled>Woonplaats...</option>
 
-            {% for city in cityList %}
-                {% set selected ="" %}
-                {% if user.city.zipcode == city.zipcode %}
-                    {% set selected = "selected" %}
-                {% endif %}
-                <option value="{{ city.id }}" {{ selected }}>
-                    {{city.zipcode}}, {{ city.name }}
-                </option>
-            {% endfor %}
-        </select>
+                {% for city in cityList %}
+                    {% set selected ="" %}
+                    {% if user.city.zipcode == city.zipcode %}
+                        {% set selected = "selected" %}
+                    {% endif %}
+                    <option value="{{ city.id }}" {{ selected }}>
+                        {{city.zipcode}}, {{ city.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
 
-        <input type="submit" name="accountSubmit" value="Wijzigen">
+        <button type="submit" name="accountSubmit" class="btn btn-default">Wijzigen</button>
     </form>
     <form name="passwordForm" action="account.php" method="post">
-        <input type="password" name="oldpassword" placeholder="Oud Wachtwoord">
-        <input type="password" name="password" placeholder="Nieuw Wachtwoord">
-        <input type="password" name="password2" placeholder="Bevestig wachtwoord">
-        <input type="submit" name="passwordSubmit" value="Wijzigen">
+        <div class="form-group">
+            <input type="password" name="oldpassword" placeholder="Oud Wachtwoord" class="form-control">
+        </div>
+        <div class="form-group">
+            <input type="password" name="password" placeholder="Nieuw Wachtwoord" class="form-control">
+        </div>
+        <div class="form-group">
+            <input type="password" name="password2" placeholder="Bevestig wachtwoord" class="form-control">
+        </div>
+        <button type="submit" name="passwordSubmit" class="btn btn-default">Wijzigen</div>
     </form>
 
 

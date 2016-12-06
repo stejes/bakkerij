@@ -8,23 +8,41 @@
         <h3>Foute inloggegevens</h3>
     {% endif %}
     <form name="loginForm" action="login.php" method="post">
-        <input type="text" name="email" placeholder="email" required>
-        <input type="password" name="password" placeholder="wachtwoord" required>
-        <input type="submit" name="loginSubmit" value="login">
+        <div class="form-group">
+            <input class=form-control type="text" name="email" placeholder="email" required>
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="password" placeholder="wachtwoord" required>
+        </div>
+        <div class="form-group">
+            <button type="submit" name="loginSubmit" class="btn btn-default">Login</button>
+        </div>
     </form>
 
     <form name="registerForm" action="login.php" method="post">
-        <input type="text" name="email" placeholder="email" required>
-        <input type="text" name="name" placeholder="familienaam" required>
-        <input type="text" name="firstname" placeholder="voornaam" required>
-        <input type="text" name="address" placeholder="adres" required>
-        <select name="city" required>
+        <div class="form-group">
+        <input type="text" name="email" placeholder="email" class="form-control" required>
+        </div>
+        <div class="form-group">
+        <input type="text" name="name" placeholder="familienaam" class="form-control" required>
+        </div>
+        <div class="form-group">
+        <input type="text" name="firstname" placeholder="voornaam" class="form-control" required>
+        </div>
+        <div class="form-group">
+        <input type="text" name="address" placeholder="adres" class="form-control" required>
+        </div>
+        <div class="form-group">
+        <select name="city" class="form-control" required>
             <option disabled selected>Selecteer gemeente...</option>
             {% for city in cityList %}
-            <option value="{{ city.id }}">{{ city.zipcode }} - {{ city.name }}</option>
+                <option value="{{ city.id }}">{{ city.zipcode }} - {{ city.name }}</option>
             {% endfor %}
         </select>
-        <input type="submit" name="registerSubmit" value="registreren">
+        </div>
+        
+        <button type="submit" name="registerSubmit" class="btn btn-default">Registreer</button>
+        
 
     </form>
 {% endblock %}

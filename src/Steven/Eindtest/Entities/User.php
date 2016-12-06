@@ -59,7 +59,7 @@ class User {
         return $this->isBlocked;
     }
     function getPassword() {
-        print "in setpass";
+        //print "in setpass";
         return $this->password;
     }
 

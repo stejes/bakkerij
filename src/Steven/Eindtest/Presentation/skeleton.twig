@@ -4,8 +4,8 @@
         <meta charset="UTF-8">
         {% block head %}
             <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"> 
-            <link rel="stylesheet" href="src/OWG/Weggeefwinkel/Presentation/Css/style.css" />
-            <link rel="stylesheet" href="src/OWG/Weggeefwinkel/Presentation/Css/normalize.css" />
+            <link rel="stylesheet"  href="src/Steven/Eindtest/Presentation/bootstrap-3.3.7-dist/css/bootstrap.min.css"> 
+            <link rel="stylesheet"  href="src/Steven/Eindtest/Presentation/Css/custom.css"> 
             <title>{% block title %}{% endblock %} - Weggeefwinkel</title>
         {% endblock %}
     </head>
@@ -13,34 +13,39 @@
         <div id="container">
             {% block header %}
                 <header>
-                    <nav>
-                        <ul>
-                            <li>
-                                <a href="index.php">Start</a>
-                            </li>
-                            <li>
-                                <a href="order.php">Bestellen</a>
-                            </li>
-                            <li>
-                                <a href="orders.php">Mijn bestellingen</a>
-                            </li>
-                            <li>
-                                <a href="account.php">Account</a>
-                            </li>
-                            <li>
-                                {% if not isLoggedIn %}
-                                    <a href="login.php">Login</a>
-                                {% else %}
-                                    <a href="login.php?action=logout">Logout</a>
-                                {% endif %}
-                            </li>
-                        </ul>
+                    <nav class="navbar navbar-default">
+                        <div class="container-fluid">
+                            <div class="navbar-header">
+                                <a class="navbar-brand" href="index.php">Bakkerij</a>
+                            </div>
+                            <ul class="nav navbar-nav">
+                                <li>
+                                    <a href="index.php">Start</a>
+                                </li>
+                                <li>
+                                    <a href="order.php">Bestellen</a>
+                                </li>
+                                <li>
+                                    <a href="orders.php">Mijn bestellingen</a>
+                                </li>
+                                <li>
+                                    <a href="account.php">Account</a>
+                                </li>
+                                <li>
+                                    {% if not isLoggedIn %}
+                                        <a href="login.php">Login</a>
+                                    {% else %}
+                                        <a href="login.php?action=logout">Logout</a>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        </div>
                     </nav>
                 </header>
 
             {% endblock %}
             <section id="content"> <div class="container">{% block content %}{% endblock %}</div></section>
-            <footer>
+            <footer class="footer">
                 {% block footer %}
                     &copy; Copyright 2011 by <a href="http://bla.bla">you</a>.
                 {% endblock %}

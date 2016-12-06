@@ -21,6 +21,8 @@ if (isset($_POST["registerSubmit"])) {
         $passwordString = $userSvc->registerUser($_POST["email"], $_POST["name"], $_POST["firstname"], $_POST["address"], $_POST["city"]);
         if ($passwordString) {
             $_SESSION["email"] = $_POST["email"];
+            $_SESSION["password"] = $passwordString;
+            header("location: account.php");
         }
     } catch (EmptyFieldsException $ex) {
         header("location: login.php?error=emptyfields");
