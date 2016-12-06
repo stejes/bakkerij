@@ -4,6 +4,7 @@
 
 {% block content %}
     <!--{{ email }} - {{ password }}-->
+    <h2>Log in</h2>
     {% if error == "loginfailed" %}
         <h3>Foute inloggegevens</h3>
     {% endif %}
@@ -19,6 +20,7 @@
         </div>
     </form>
 
+    <h2>Of registreer je nu...</h2>
     <form name="registerForm" action="login.php" method="post">
         <div class="form-group">
         <input type="text" name="email" placeholder="email" class="form-control" required>
