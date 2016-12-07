@@ -5,6 +5,7 @@ namespace Steven\Eindtest\Data;
 use Steven\Eindtest\Entities\User;
 use Steven\Eindtest\Exceptions\CustomerExistsException;
 use Steven\Eindtest\Exceptions\LoginFailedException;
+use Steven\Eindtest\Exceptions\NonExistingCityException;
 use PDO;
 
 class UserDAO {

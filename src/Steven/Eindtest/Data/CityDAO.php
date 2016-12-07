@@ -28,8 +28,11 @@ class CityDAO {
         $dbh = new PDO(DBConfig::$DB_CONNSTRING, DBConfig::$DB_USERNAME, DBConfig::$DB_PASSWORD);
         $stmt = $dbh->prepare($sql);
         $stmt->execute(array(':id' => $id));
-        $rij = $stmt->fetch(PDO::FETCH_ASSOC);
-        $city = City::create($rij["id"], $rij["zipcode"], $rij["name"]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if(!$row){
+            return null;
+        }
+        $city = City::create($row["id"], $row["zipcode"], $row["name"]);
         $dbh = null;
         return $city;
     }

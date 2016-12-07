@@ -1,6 +1,6 @@
 {% extends "skeleton.twig" %}
 
-{% block title %}Index{% endblock %}
+{% block title %}Log in/Register{% endblock %}
 
 {% block content %}
     <!--{{ email }} - {{ password }}-->
@@ -21,30 +21,42 @@
     </form>
 
     <h2>Of registreer je nu...</h2>
+    {% if error == "cityerror" %}
+        <h3>Gemeente bestaat niet</h3>
+    {% elseif error == "customerexists" %}
+        <h3>Er is al een account gekoppeld aan dit emailadres</h3>
+    {% elseif error == "emptyfields" %}
+        <h3>Alle velden zijn verplicht!</h3>
+    {% endif %}
+
     <form name="registerForm" action="login.php" method="post">
         <div class="form-group">
-        <input type="text" name="email" placeholder="email" class="form-control" required>
+            <input type="text" name="email" placeholder="email" class="form-control" value="{{user.email}}" required>
         </div>
         <div class="form-group">
-        <input type="text" name="name" placeholder="familienaam" class="form-control" required>
+            <input type="text" name="name" placeholder="familienaam" class="form-control" value="{{user.name}}" required>
         </div>
         <div class="form-group">
-        <input type="text" name="firstname" placeholder="voornaam" class="form-control" required>
+            <input type="text" name="firstname" placeholder="voornaam" class="form-control" value="{{user.firstname}}" required>
         </div>
         <div class="form-group">
-        <input type="text" name="address" placeholder="adres" class="form-control" required>
+            <input type="text" name="address" placeholder="adres" class="form-control" value="{{user.address}}" required>
         </div>
         <div class="form-group">
-        <select name="city" class="form-control" required>
-            <option disabled selected>Selecteer gemeente...</option>
-            {% for city in cityList %}
-                <option value="{{ city.id }}">{{ city.zipcode }} - {{ city.name }}</option>
-            {% endfor %}
-        </select>
+            <select name="city" class="form-control" required>
+                <option disabled selected>Selecteer gemeente...</option>
+                {% for city in cityList %}
+                    {% set selected ="" %}
+                    {% if user.city.zipcode == city.zipcode %}
+                        {% set selected = "selected" %}
+                    {% endif %}
+                    <option value="{{ city.id }} {{ selected }}">{{ city.zipcode }} - {{ city.name }}</option>
+                {% endfor %}
+            </select>
         </div>
-        
+
         <button type="submit" name="registerSubmit" class="btn btn-default">Registreer</button>
-        
+
 
     </form>
 {% endblock %}

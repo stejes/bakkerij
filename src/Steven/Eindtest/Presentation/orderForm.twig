@@ -4,13 +4,37 @@
 
 {% block content %}
     <h1>Bestellen: </h1>
+    <h3>{{ error }}</h3>
+    <form class="form-inline" name="orderForm" action="order.php" method="post">
+        <div class="form-group">
+            <input type="number" name="amount" value="1" min="1" required class="form-control">
+            <select name="product" required class="form-control">
 
+                <option selected disabled>Kies een product...</option>
+                {% for product in productList %}
+                    <option value="{{product.id}}">
+                        {{product.name}}-{{product.price}}€
+                    </option>
+                {% endfor %}
+
+            </select>
+
+        </div>
+        <button type="submit" name="orderAdd" class="btn btn-default">Toevoegen</button>
+    </form>
+    <h2>Winkelmandje:</h2>
     {% if cart.cart|length > 0 %}
         {% set total = 0 %}
+        {%  set iter = 0 %}
         {% for cartline in cart.cart %}
             <ul>
                 <li>
-                    {{ cartline.product.name }} - {{ cartline.amount}} * {{ cartline.product.price }} - {{ cartline.product.price * cartline.amount }}
+                    <form action="order.php" method="post">
+                        {{ cartline.amount}} x {{ cartline.product.name }}  @ {{ cartline.product.price }}€ = {{ cartline.product.price * cartline.amount }}€
+                      
+                           <button type="submit" name="deleteLineSubmit" value="{{iter}}" class="btn btn-default">Wis item</button>
+                           {% set iter = iter+1 %}
+                    </form>
                     {% set total = total + cartline.product.price * cartline.amount %}
                 </li>
             </ul>
@@ -34,25 +58,9 @@
             Item 2 - aantal - wijzig - verwijder
         </li>
     </ul>-->
-    <form class="form-inline" name="orderForm" action="order.php" method="post">
-        <div class="form-group">
-            <input type="number" name="amount" value="1" min="1" class="form-control">
-            <select name="product" class="form-control">
 
-                <option selected disabled>Kies een product...</option>
-                {% for product in productList %}
-                    <option value="{{product.id}}">
-                        {{product.name}}-{{product.price}}€
-                    </option>
-                {% endfor %}
-
-            </select>
-            
-        </div>
-                <button type="submit" name="orderAdd" class="btn btn-default">Toevoegen</button>
-    </form>
     <form name="checkout" action="checkout.php" method="post">
-        <button type="submit" name="orderSubmit" class="btn btn-default">Bevestigen</button>
+        <button type="submit" name="orderSubmit" class="btn btn-default">Naar afrekening</button>
     </form>
 
 

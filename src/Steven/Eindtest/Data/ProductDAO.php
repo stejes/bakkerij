@@ -3,6 +3,7 @@
 namespace Steven\Eindtest\Data;
 
 use Steven\Eindtest\Entities\Product;
+use Steven\Eindtest\Exceptions\NonExistingProductException;
 use PDO;
 
 class ProductDAO {
@@ -14,6 +15,9 @@ class ProductDAO {
         $stmt = $dbh->prepare($sql);
         $stmt->execute(array(':id' => $id));
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if(!$row){
+            throw new NonExistingProductException();
+        }
         $product = Product::create($row["id"], $row["name"], $row["price"]);
         $dbh = null;
         //print_r($product);

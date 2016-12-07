@@ -8,6 +8,6 @@ $isLoggedIn = false;
 if(isset($_SESSION["email"])){
     $isLoggedIn = true;
 }
-$view = $twig->render("loginForm.html.twig", array("isLoggedIn" => $isLoggedIn));
+$view = $twig->render("index.twig", array("isLoggedIn" => $isLoggedIn));
 print($view);
 

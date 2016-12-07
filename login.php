@@ -4,11 +4,13 @@ session_start();
 require_once 'bootstrap.php';
 
 //print "blabla";
+use Steven\Eindtest\Entities\User;
 use Steven\Eindtest\Business\CityService;
 use Steven\Eindtest\Business\UserService;
 use Steven\Eindtest\Exceptions\EmptyFieldsException;
 use Steven\Eindtest\Exceptions\CustomerExistsException;
 use Steven\Eindtest\Exceptions\LoginFailedException;
+use Steven\Eindtest\Exceptions\NonExistingCityException;
 
 $citySvc = new CityService();
 $cityList = $citySvc->getAll();
@@ -16,6 +18,8 @@ $isLoggedIn = false;
 $error = null;
 if (isset($_POST["registerSubmit"])) {
     //print "register";
+    $user = User::create(0, $_POST["name"], $_POST["firstname"], $_POST["address"], $_POST["city"], $_POST["email"], null, 0);
+    //print_r($user);
     try {
         $userSvc = new UserService();
         $passwordString = $userSvc->registerUser($_POST["email"], $_POST["name"], $_POST["firstname"], $_POST["address"], $_POST["city"]);
@@ -23,13 +27,17 @@ if (isset($_POST["registerSubmit"])) {
             $_SESSION["email"] = $_POST["email"];
             $_SESSION["password"] = $passwordString;
             header("location: account.php");
+            exit(0);
         }
     } catch (EmptyFieldsException $ex) {
-        header("location: login.php?error=emptyfields");
+        //header("location: login.php?error=emptyfields");
+        $error = "emptyfields";
     } catch (CustomerExistsException $ex) {
-        header("location: login.php?error=customerexists");
-    } catch (NonExistingCityException $ex){
-        header("location: login.php?error=cityerror");
+        //header("location: login.php?error=customerexists");
+        $error = "customerexists";
+    } catch (NonExistingCityException $ex) {
+        //header("location: login.php?error=cityerror");
+        $error = "cityerror";
     }
 } else if (isset($_POST["loginSubmit"])) {
     //print "in eerste if";
@@ -37,7 +45,7 @@ if (isset($_POST["registerSubmit"])) {
         try {
             $userSvc = new UserService();
             //$isValid = $userSvc->checkLogin($_POST["email"], $_POST["password"]);
-           $userSvc->checkLogin($_POST["email"], $_POST["password"]);
+            $userSvc->checkLogin($_POST["email"], $_POST["password"]);
             // print "in tweede if";
             //print $isValid;
             //if ($isValid) {
@@ -57,10 +65,12 @@ if (isset($_POST["registerSubmit"])) {
 if (isset($_SESSION["email"])) {
     $isLoggedIn = true;
 }
-if(isset($_GET["error"])){
-    $error = $_GET["error"];
+
+
+if (!isset($user)) {
+    $user = null;
 }
 //$view = $twig->render("loginForm.html.twig", array("cityList" => $cityList, "email" => $_POST["email"], "password" => $passwordString));
-$view = $twig->render("loginForm.html.twig", array("cityList" => $cityList, "isLoggedIn" => $isLoggedIn, "error" => $error));
+$view = $twig->render("loginForm.html.twig", array("cityList" => $cityList, "isLoggedIn" => $isLoggedIn, "error" => $error, "user" => $user));
 print($view);
 

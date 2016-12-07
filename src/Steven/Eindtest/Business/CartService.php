@@ -3,7 +3,8 @@
 namespace Steven\Eindtest\Business;
 
 use Steven\Eindtest\Entities\Cartline;
-use Steven\Eindtest\Entities\Product;
+use Steven\Eindtest\Data\ProductDAO;
+use Steven\Eindtest\Exceptions\AmountOutOfBoundsException;
 
 class CartService {
 
@@ -18,11 +19,15 @@ class CartService {
         $this->cart = array();
     }
 
-    public function addLine($product, $amount) {
-        $id = $product->getId();
+    public function addLine($productId, $amount) {
+        if($amount < 1 || !is_numeric($amount)){
+            throw new AmountOutOfBoundsException();
+        }
+        $productDao = new ProductDAO();
+        $product = $productDao->getById($productId);
         $isFound = false;
         foreach ($this->cart as $cartline) {
-            if ($cartline->getProduct()->getId() == $id) {
+            if ($cartline->getProduct()->getId() == $productId) {
                 $cartline->add($amount);
                 $isFound = true;
             }
@@ -32,6 +37,12 @@ class CartService {
 
             array_push($this->cart, $cartLine);
         }
+    }
+    
+    public function deleteLine($id){
+       /* unset($this->cart[$id]);
+        array_values($this->cart);*/
+        array_splice($this->cart, $id, 1);
     }
 
     public function getCart() {
