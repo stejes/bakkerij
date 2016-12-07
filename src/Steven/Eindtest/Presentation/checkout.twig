@@ -8,19 +8,19 @@
     {% for cartline in cart.cart %}
         <ul>
             <li>
-                {{ cartline.product.name }} - {{ cartline.amount}} * {{ cartline.product.price }} - {{ cartline.product.price * cartline.amount }}
+                {{ cartline.amount}} x {{ cartline.product.name }}  @ {{ cartline.product.price }}€ = {{ cartline.product.price * cartline.amount }}€
                 {% set total = total + cartline.product.price * cartline.amount %}
             </li>
         </ul>
     {% endfor %}
 
     
-    Totaal: {{ total }}
+    Totaal: {{ total }}€
     
     <form action="order.php">
         <input type="submit" name="" value="wijzig bestelling">
     </form>
-    
+    {{ error }}
     <form action="checkout.php" method="post">
         Kies een datum (yyyy-mm-dd): 
         <input type="date" name="date">
