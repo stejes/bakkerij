@@ -5,6 +5,7 @@ require_once 'bootstrap.php';
 
 use Steven\Eindtest\Business\OrderService;
 use Steven\Eindtest\Exceptions\DateOutOfBoundsException;
+use Steven\Eindtest\Exceptions\OrderExistsException;
 $isLoggedIn = false;
 $error = null;
 //print "blabla";
@@ -23,6 +24,8 @@ if (isset($_SESSION["email"])) {
             exit(0);
             }catch(DateOutOfBoundsException $ex){
                 $error = "Datum moet na vandaag zijn en maximum drie dagen in de toekomst.";
+            }catch(OrderExistsException $ex){
+                $error = "Er is al een bestelling voor die datum.";
             }
         }
     }

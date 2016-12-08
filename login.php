@@ -45,13 +45,16 @@ if (isset($_POST["registerSubmit"])) {
         try {
             $userSvc = new UserService();
             //$isValid = $userSvc->checkLogin($_POST["email"], $_POST["password"]);
-            $userSvc->checkLogin($_POST["email"], $_POST["password"]);
+            $isValid = $userSvc->checkLogin($_POST["email"], $_POST["password"]);
             // print "in tweede if";
             //print $isValid;
             //if ($isValid) {
-            $_SESSION["email"] = $_POST["email"];
-            header("location: order.php");
-            exit(0);
+            if ($isValid) {
+                $_SESSION["email"] = $_POST["email"];
+                header("location: order.php");
+                exit(0);
+            }
+            
             //}
         } catch (LoginFailedException $ex) {
             header("location: login.php?error=loginfailed");

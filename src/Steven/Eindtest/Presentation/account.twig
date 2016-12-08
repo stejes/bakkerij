@@ -13,9 +13,9 @@
     <form class="" name="accountForm" action="account.php" method="post">
         <div class="form-group">
             <label class="control-label" for="email">Email: </label>
-            
-                <p class="form-control-static" id="email" >{{user.email}}</p>
-            
+
+            <p class="form-control-static" id="email" >{{user.email}}</p>
+
         </div>
         <div class="form-group">
             <label class="control-label" for="firstname">Voornaam: </label>
@@ -49,6 +49,12 @@
 
         <button type="submit" name="accountSubmit" class="btn btn-default">Wijzigen</button>
     </form>
+    {% if error == "wrong pass" %}
+        <span class="errormessage">U hebt het verkeerde paswoord opgegeven</span>
+    {% elseif error == "passwordmatch"%}
+        <span class="errormessage">De paswoorden zijn niet gelijk</span>
+    {% endif %}
+
     <form name="passwordForm" action="account.php" method="post">
         <div class="form-group">
             <input type="password" name="oldpassword" placeholder="Oud Wachtwoord" class="form-control">

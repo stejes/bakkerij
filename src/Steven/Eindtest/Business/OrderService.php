@@ -1,16 +1,22 @@
 <?php
 
-
-
 namespace Steven\Eindtest\Business;
+
 use Steven\Eindtest\Data\OrderDAO;
 use Steven\Eindtest\Exceptions\DateOutOfBoundsException;
 
 class OrderService {
-    public function confirm($cart, $email, $date){
+
+    public function confirm($cart, $email, $date) {
+        $dateOrder = date_create(date($date));
         $dateNow = date_create(date('Y-m-d'));
-        $dateLate = date_add($dateNow, date_interval_create_from_date_string("3days"));
-        if($date <= $dateNow || $date > $dateLate){
+        
+        print_r($dateOrder);
+        print_r($dateNow);
+        print date_diff($dateOrder, $dateNow)->format('%R%a');
+        $dateDiff = date_diff($dateOrder, $dateNow)->format('%R%a');
+        if ($dateDiff >= 0 || $dateDiff < -3) {
+            
             throw new DateOutOfBoundsException();
         }
         $cartlines = $cart->getCart();
@@ -19,8 +25,8 @@ class OrderService {
         $userId = $userSvc->getByEmail($email)->getId();
         $orderDao->add($cartlines, $userId, $date);
     }
-    
-    public function getOrders($email){
+
+    public function getOrders($email) {
         $userSvc = new UserService();
         $userId = $userSvc->getByEmail($email)->getId();
         //print $userId;
@@ -28,4 +34,11 @@ class OrderService {
         $orderList = $orderDao->getByUserId($userId);
         return $orderList;
     }
+    
+    public function cancel($orderId){
+        $orderDao = new OrderDAO();
+        $order = $orderDao->getById($orderId);
+        $orderDao->delete($order);
+    }
+
 }

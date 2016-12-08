@@ -9,6 +9,8 @@
 namespace Steven\Eindtest\Business;
 
 use Steven\Eindtest\Exceptions\EmptyFieldsException;
+use Steven\Eindtest\Exceptions\PasswordsDontMatchException;
+use Steven\Eindtest\Exceptions\WrongPasswordException;
 use Steven\Eindtest\Data\UserDAO;
 use Steven\Eindtest\Data\CityDAO;
 
@@ -48,7 +50,8 @@ class UserService {
         $userDao = new UserDAO();
         //print "user" . $user;
         //print "passding: " . sha1($password);
-        if ($userDao->isValidUser($email, sha1($password))) {
+        $user = $userDao->getByEmail($email);
+        if (!is_null($user) && $user->getIsBlocked() == false && $user->getPassword() == sha1($password)) {
             return true;
         }
         return false;
@@ -75,8 +78,16 @@ class UserService {
         if ($password == $password2) {
             $userDao = new UserDao();
             $user = $userDao->getByEmail($email);
-            $user->setPassword(sha1($password));
-            $userDao->updatePass($user);
+            if ($user->getPassword() == sha1($oldpassword)) {
+                $user->setPassword(sha1($password));
+                $userDao->update($user);
+            }
+            else{
+                throw new WrongPasswordException();
+            }
+        }
+        else{
+            throw new PasswordsDontMatchException();
         }
     }
 

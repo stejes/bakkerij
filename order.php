@@ -24,12 +24,8 @@ if (isset($_SESSION["email"])) {
     }
     if (isset($_POST["orderAdd"])) {
         if (isset($_POST["amount"]) && isset($_POST["product"])) {
-            //$product = $productSvc->getById($_POST["product"]);
             $productId = $_POST["product"];
             $amount = $_POST["amount"];
-            /* print "<br>";
-              print_r($product);
-              print "<br>"; */
 
 
             if (!isset($_SESSION["cart"])) {

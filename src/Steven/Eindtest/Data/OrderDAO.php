@@ -6,12 +6,17 @@ namespace Steven\Eindtest\Data;
 use Steven\Eindtest\Entities\Order;
 use Steven\Eindtest\Entities\Orderline;
 use Steven\Eindtest\Business\ProductService;
-
+use Steven\Eindtest\Exceptions\OrderExistsException;
+use Steven\Eindtest\Exceptions\NonExistingOrderException;
 use PDO;
 
 class OrderDAO {
 
     public function add($cartlines, $userId, $date) {
+        $existingOrder = $this->getByUserIdAndDate($userId, $date);
+        if(!is_null($existingOrder)){
+            throw new OrderExistsException();
+        }
         $sql = "insert into orders (customer_id, pick_up_date) values (:customer_id, :pick_up_date)";
         $dbh = new PDO(DBConfig::$DB_CONNSTRING, DBConfig::$DB_USERNAME, DBConfig::$DB_PASSWORD);
         $stmt = $dbh->prepare($sql);
@@ -28,6 +33,22 @@ class OrderDAO {
             $stmt->execute(array(':order_id' => $orderId, ":product_id" => $productId, ":amount" => $amount));
             $dbh = null;
         }
+    }
+    
+    public function getByUserIdAndDate($userId, $date){
+        $sql = "select id, customer_id, pick_up_date from orders where customer_id = :customerId and pick_up_date = :date";
+        $dbh = new PDO(DBConfig::$DB_CONNSTRING, DBConfig::$DB_USERNAME, DBConfig::$DB_PASSWORD);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute(array(':customerId' => $userId, ":date" => $date));
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $dbh = null;
+        if (!$row){
+            return null;
+        }
+        else{
+            $order = new Order($row["id"], $row["pick_up_date"], $row["customer_id"]);
+        }
+        return $order;
     }
 
     public function getByUserId($customerId) {
@@ -59,6 +80,42 @@ class OrderDAO {
 
         
         return $orderList;
+    }
+    
+    public function getById($id){
+        $sql = "select id, customer_id, pick_up_date from orders where id = :id";
+        $dbh = new PDO(DBConfig::$DB_CONNSTRING, DBConfig::$DB_USERNAME, DBConfig::$DB_PASSWORD);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute(array(':id' => $id));
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $dbh = null;
+        if (!$row){
+            throw new NonExistingOrderException();
+        }
+        else{
+            $order = new Order($row["id"], $row["pick_up_date"], $row["customer_id"]);
+        }
+        return $order;
+    }
+    
+    public function delete($order){
+        $userDao = new UserDAO();
+        $user = $userDao->getByEmail($_SESSION["email"]);
+        //$order = $this->getById($id);
+        if($order->getCustomerId() != $user->getId()){
+            throw new UnauthorizedException();
+        }
+        $sql = "delete from orderlines where order_id = :id";
+        $dbh = new PDO(DBConfig::$DB_CONNSTRING, DBConfig::$DB_USERNAME, DBConfig::$DB_PASSWORD);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute(array(':id' => $order->getId()));
+        $dbh = null;
+        $sql = "delete from orders where id = :id";
+        $dbh = new PDO(DBConfig::$DB_CONNSTRING, DBConfig::$DB_USERNAME, DBConfig::$DB_PASSWORD);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute(array(':id' => $order->getId()));
+        $dbh = null;
+        
     }
 
 }

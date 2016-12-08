@@ -26,25 +26,30 @@
     {% if cart.cart|length > 0 %}
         {% set total = 0 %}
         {%  set iter = 0 %}
+          <ul>
         {% for cartline in cart.cart %}
-            <ul>
+          
                 <li>
                     <form action="order.php" method="post">
                         {{ cartline.amount}} x {{ cartline.product.name }}  @ {{ cartline.product.price }}€ = {{ cartline.product.price * cartline.amount }}€
-                      
-                           <button type="submit" name="deleteLineSubmit" value="{{iter}}" class="btn btn-default">Wis item</button>
-                           {% set iter = iter+1 %}
+
+                        <button type="submit" name="deleteLineSubmit" value="{{iter}}" class="btn btn-default">Wis item</button>
+                        {% set iter = iter+1 %}
                     </form>
                     {% set total = total + cartline.product.price * cartline.amount %}
                 </li>
-            </ul>
+           
         {% endfor %}
+         </ul>
         Voorlopig totaal: {{ total }}
         <div>
             <form name="cancel" action="order.php" method="post">
                 <button type="submit" name="cancelSubmit" class="btn btn-default">Alles wissen</button>
             </form>
         </div>
+        <form name="checkout" action="checkout.php" method="post">
+            <button type="submit" name="orderSubmit" class="btn btn-default">Naar afrekening</button>
+        </form>
 
     {% else %}
         Nog geen producten in winkelmandje.
@@ -59,9 +64,7 @@
         </li>
     </ul>-->
 
-    <form name="checkout" action="checkout.php" method="post">
-        <button type="submit" name="orderSubmit" class="btn btn-default">Naar afrekening</button>
-    </form>
+
 
 
 
