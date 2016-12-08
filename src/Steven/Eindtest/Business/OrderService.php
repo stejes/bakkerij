@@ -11,9 +11,9 @@ class OrderService {
         $dateOrder = date_create(date($date));
         $dateNow = date_create(date('Y-m-d'));
         
-        print_r($dateOrder);
+        /*print_r($dateOrder);
         print_r($dateNow);
-        print date_diff($dateOrder, $dateNow)->format('%R%a');
+        print date_diff($dateOrder, $dateNow)->format('%R%a');*/
         $dateDiff = date_diff($dateOrder, $dateNow)->format('%R%a');
         if ($dateDiff >= 0 || $dateDiff < -3) {
             

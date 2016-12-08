@@ -25,9 +25,21 @@ input[type="number"]{
 form{
     margin-bottom: 2em;
 }
+form.cartlist > div{
+    width: 20% !important;
+}
 
 .totalPrice{
     font-weight: bold;
+}
+
+ul{
+    
+    list-style-type: none;
+}
+
+li form{
+    margin: 0;
 }
 
 footer{
