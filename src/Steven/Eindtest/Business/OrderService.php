@@ -10,6 +10,7 @@ class OrderService {
     public function confirm($cart, $email, $date){
         $dateNow = date_create(date('Y-m-d'));
         $dateLate = date_add($dateNow, date_interval_create_from_date_string("3days"));
+        
         if($date <= $dateNow || $date > $dateLate){
             throw new DateOutOfBoundsException();
         }
