@@ -6,7 +6,7 @@
     <!--{{ email }} - {{ password }}-->
     <h2>Log in</h2>
     {% if error == "loginfailed" %}
-        <h3>Foute inloggegevens</h3>
+        <span class="errormessage">Foute inloggegevens</span>
     {% endif %}
     {% if not email is null %}
         {% set emailvalue = email %}
@@ -27,16 +27,18 @@
 
     <h2>Of registreer je nu...</h2>
     {% if error == "cityerror" %}
-        <h3>Gemeente bestaat niet</h3>
+        <span class="errormessage">Gemeente bestaat niet</span>
     {% elseif error == "customerexists" %}
-        <h3>Er is al een account gekoppeld aan dit emailadres</h3>
+        <span class="errormessage">Er is al een account gekoppeld aan dit emailadres</span>
     {% elseif error == "emptyfields" %}
-        <h3>Alle velden zijn verplicht!</h3>
+        <span class="errormessage">Alle velden zijn verplicht!</span>
+        {% elseif error == "notemail" %}
+        <span class="errormessage">Gelieve een geldig email op te geven</span>
     {% endif %}
 
     <form name="registerForm" action="login.php" method="post">
         <div class="form-group">
-            <input type="text" name="email" placeholder="email" class="form-control" value="{{user.email}}" required>
+            <input type="text" name="email" placeholder="email" class="form-control" value="{{ user.email }}" required>
         </div>
         <div class="form-group">
             <input type="text" name="name" placeholder="familienaam" class="form-control" value="{{user.name}}" required>
@@ -47,9 +49,10 @@
         <div class="form-group">
             <input type="text" name="address" placeholder="adres" class="form-control" value="{{user.address}}" required>
         </div>
+        {{ user.city }}
         <div class="form-group">
             <select name="city" class="form-control" required>
-                <option disabled selected>Selecteer gemeente...</option>
+                <option disabled>Selecteer gemeente...</option>
                 {% for city in cityList %}
                     {% set selected ="" %}
                     {% if user.city.zipcode == city.zipcode %}

@@ -4,7 +4,7 @@
 
 {% block content %}
     <h1>Bestellen: </h1>
-    <h3>{{ error }}</h3>
+    <span class="errormessage">{{ error }}</span>
     <form class="form-inline" name="orderForm" action="order.php" method="post">
         <div class="form-group">
             <input type="number" name="amount" value="1" min="1" required class="form-control">
@@ -43,7 +43,7 @@
 
             {% endfor %}
             <li>&nbsp;</li>
-            <li>Voorlopig totaal: {{ total }}€</li>
+            <li class="totalPrice">Voorlopig totaal: {{ total }}€</li>
         </ul>
         
         <div>

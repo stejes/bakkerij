@@ -11,6 +11,8 @@ namespace Steven\Eindtest\Business;
 use Steven\Eindtest\Exceptions\EmptyFieldsException;
 use Steven\Eindtest\Exceptions\PasswordsDontMatchException;
 use Steven\Eindtest\Exceptions\WrongPasswordException;
+use Steven\Eindtest\Exceptions\LoginFailedException;
+use Steven\Eindtest\Exceptions\NotAnEmailException;
 use Steven\Eindtest\Data\UserDAO;
 use Steven\Eindtest\Data\CityDAO;
 
@@ -24,7 +26,11 @@ class UserService {
     public function registerUser($email, $name, $firstname, $address, $city) {
         if ($email == "" || $name == "" || $firstname == "" || $address == "" || $city == "") {
             throw new EmptyFieldsException();
-        } else {
+        } 
+        else if(! filter_var($email, FILTER_VALIDATE_EMAIL)){
+            throw new NotAnEmailException();
+        }
+        else {
             $passwordString = $this->generatePassword();
             $password = sha1($passwordString);
             $userDao = new UserDAO();
@@ -54,7 +60,7 @@ class UserService {
         if (!is_null($user) && $user->getIsBlocked() == false && $user->getPassword() == sha1($password)) {
             return true;
         }
-        return false;
+        throw new LoginFailedException();
     }
 
     public function getByEmail($email) {

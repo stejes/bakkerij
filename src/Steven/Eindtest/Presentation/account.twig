@@ -4,12 +4,39 @@
 
 {% block content %}
     <h1>Mijn gegevens: </h1>
+    {% if success == "passsuccess" %}
+        <span class="successmessage">Wachtwoord gewijzigd</span>
+    {% endif %}
+    {% if success == "datasuccess" %}
+        <span class="successmessage">Persoonlijke gegevens gewijzigd</span>
+    {% endif %}
 
     {% if not password == null %}
         Je voorlopige paswoord is {{ password }}. Wijzig dit nu!
     {% endif %}
+    {% if error == "wrong pass" %}
+        <span class="errormessage">U hebt het verkeerde paswoord opgegeven</span>
+    {% elseif error == "passwordmatch"%}
+        <span class="errormessage">De paswoorden zijn niet gelijk</span>
+    {% endif %}
 
+    <h4>Wijzig paswoord</h4>
+    
+    <form name="passwordForm" action="account.php" method="post">
+        <div class="form-group">
+            <input type="password" name="oldpassword" placeholder="Oud Wachtwoord" class="form-control">
+        </div>
+        <div class="form-group">
+            <input type="password" name="password" placeholder="Nieuw Wachtwoord" class="form-control">
+        </div>
+        <div class="form-group">
+            <input type="password" name="password2" placeholder="Bevestig wachtwoord" class="form-control">
+        </div>
+        <button type="submit" name="passwordSubmit" class="btn btn-default">Wijzigen</button>
+    </form>
 
+    <h4>Wijzig persoonlijke gegevens</h4>
+     
     <form class="" name="accountForm" action="account.php" method="post">
         <div class="form-group">
             <label class="control-label" for="email">Email: </label>
@@ -49,24 +76,7 @@
 
         <button type="submit" name="accountSubmit" class="btn btn-default">Wijzigen</button>
     </form>
-    {% if error == "wrong pass" %}
-        <span class="errormessage">U hebt het verkeerde paswoord opgegeven</span>
-    {% elseif error == "passwordmatch"%}
-        <span class="errormessage">De paswoorden zijn niet gelijk</span>
-    {% endif %}
 
-    <form name="passwordForm" action="account.php" method="post">
-        <div class="form-group">
-            <input type="password" name="oldpassword" placeholder="Oud Wachtwoord" class="form-control">
-        </div>
-        <div class="form-group">
-            <input type="password" name="password" placeholder="Nieuw Wachtwoord" class="form-control">
-        </div>
-        <div class="form-group">
-            <input type="password" name="password2" placeholder="Bevestig wachtwoord" class="form-control">
-        </div>
-        <button type="submit" name="passwordSubmit" class="btn btn-default">Wijzigen</div>
-    </form>
 
 
 

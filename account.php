@@ -12,6 +12,7 @@ use Steven\Eindtest\Exceptions\PasswordsDontMatchException;
 $isLoggedIn = false;
 $passwordString = null;
 $error = null;
+$success = null;
 if (isset($_SESSION["email"])) {
     $isLoggedIn = true;
     $citySvc = new CityService();
@@ -27,16 +28,18 @@ if (isset($_SESSION["email"])) {
 
     if (isset($_POST["accountSubmit"])) {
         $userSvc->editData($_SESSION["email"], $_POST["firstname"], $_POST["name"], $_POST["address"], $_POST["city"]);
+        $success = "datasuccess";
     } else if (isset($_POST["passwordSubmit"])) {
         try{
         $userSvc->editPassword($_SESSION["email"], $_POST["oldpassword"], $_POST["password"], $_POST["password2"]);
+        $success = "passsuccess";
         }catch(WrongPasswordException $ex){
             $error = "wrong pass";
         }catch(PasswordsDontMatchException $ex){
             $error = "passwordmatch";
         }
     }
-    $view = $twig->render("account.twig", array("user" => $user, "cityList" => $cityList, "isLoggedIn" => $isLoggedIn, "password" => $passwordString, "error" => $error));
+    $view = $twig->render("account.twig", array("user" => $user, "cityList" => $cityList, "isLoggedIn" => $isLoggedIn, "password" => $passwordString, "error" => $error, "success" => $success));
     print($view);
 } else {
     header("location: login.php");

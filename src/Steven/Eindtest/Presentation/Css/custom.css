@@ -14,8 +14,8 @@ html{
 
 body{
     padding-bottom: 60px;
-    
-    
+
+
 }
 
 input[type="number"]{
@@ -25,16 +25,34 @@ input[type="number"]{
 form{
     margin-bottom: 2em;
 }
+
+form{
+    clear: left;
+}
+
 form.cartlist > div{
     width: 20% !important;
 }
 
 .totalPrice{
     font-weight: bold;
+    clear: left;
+}
+
+.errormessage{
+    color: red;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.successmessage{
+    color: lightgreen;
+    font-size: 1.2em;
+    font-weight: bold;
 }
 
 ul{
-    
+
     list-style-type: none;
 }
 

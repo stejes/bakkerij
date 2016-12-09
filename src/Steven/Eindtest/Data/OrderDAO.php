@@ -53,7 +53,7 @@ class OrderDAO {
     }
 
     public function getByUserId($customerId) {
-        $sql = "select id, customer_id, pick_up_date from orders where customer_id = :customerId order by pick_up_date";
+        $sql = "select id, customer_id, pick_up_date from orders where customer_id = :customerId and datediff(pick_up_date,curdate()) >=0 order by pick_up_date";
         $dbh = new PDO(DBConfig::$DB_CONNSTRING, DBConfig::$DB_USERNAME, DBConfig::$DB_PASSWORD);
         $stmt = $dbh->prepare($sql);
         $stmt->execute(array(':customerId' => $customerId));
@@ -111,11 +111,11 @@ class OrderDAO {
         $stmt = $dbh->prepare($sql);
         $stmt->execute(array(':id' => $order->getId()));
         $dbh = null;
-        $sql = "delete from orders where id = :id";
-        $dbh = new PDO(DBConfig::$DB_CONNSTRING, DBConfig::$DB_USERNAME, DBConfig::$DB_PASSWORD);
-        $stmt = $dbh->prepare($sql);
-        $stmt->execute(array(':id' => $order->getId()));
-        $dbh = null;
+        $sql2 = "delete from orders where id = :id";
+        $dbh2 = new PDO(DBConfig::$DB_CONNSTRING, DBConfig::$DB_USERNAME, DBConfig::$DB_PASSWORD);
+        $stmt2 = $dbh2->prepare($sql2);
+        $stmt2->execute(array(':id' => $order->getId()));
+        $dbh2 = null;
         
     }
 

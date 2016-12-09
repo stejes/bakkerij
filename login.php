@@ -11,6 +11,7 @@ use Steven\Eindtest\Exceptions\EmptyFieldsException;
 use Steven\Eindtest\Exceptions\CustomerExistsException;
 use Steven\Eindtest\Exceptions\LoginFailedException;
 use Steven\Eindtest\Exceptions\NonExistingCityException;
+use Steven\Eindtest\Exceptions\NotAnEmailException;
 
 $citySvc = new CityService();
 $cityList = $citySvc->getAll();
@@ -19,7 +20,7 @@ $error = null;
 $email = null;
 if (isset($_POST["registerSubmit"])) {
     //print "register";
-    $user = User::create(0, $_POST["name"], $_POST["firstname"], $_POST["address"], $_POST["city"], $_POST["email"], null, 0);
+    //$user = User::create(0, $_POST["name"], $_POST["firstname"], $_POST["address"], $_POST["city"], $_POST["email"], null, 0);
     //print_r($user);
     try {
         $userSvc = new UserService();
@@ -39,6 +40,8 @@ if (isset($_POST["registerSubmit"])) {
     } catch (NonExistingCityException $ex) {
         //header("location: login.php?error=cityerror");
         $error = "cityerror";
+    } catch (NotAnEmailException $ex){
+        $error = "notemail";
     }
 } else if (isset($_POST["loginSubmit"])) {
     //print "in eerste if";
@@ -59,7 +62,8 @@ if (isset($_POST["registerSubmit"])) {
             
             //}
         } catch (LoginFailedException $ex) {
-            header("location: login.php?error=loginfailed");
+            //header("location: login.php?error=loginfailed");
+            $error = "loginfailed";
         }
     }
 } else if (isset($_GET["action"]) && $_GET["action"] == "logout") {
@@ -78,7 +82,7 @@ if (!isset($user)) {
 if(isset($_COOKIE["email"])){
     $email = $_COOKIE["email"];
 }
-
+print_r($user);
 //$view = $twig->render("loginForm.html.twig", array("cityList" => $cityList, "email" => $_POST["email"], "password" => $passwordString));
 $view = $twig->render("loginForm.html.twig", array("cityList" => $cityList, "isLoggedIn" => $isLoggedIn, "error" => $error, "user" => $user, "email" => $email));
 print($view);
