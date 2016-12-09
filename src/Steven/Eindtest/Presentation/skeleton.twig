@@ -19,9 +19,13 @@
                                 <a class="navbar-brand" href="index.php">Bakkerij</a>
                             </div>
                             <ul class="nav navbar-nav">
-                                
+
                                 <li>
-                                    <a href="order.php">Bestellen</a>
+                                    <a href="order.php">Bestellen 
+                                        {% if cart.cart|length > 0 %}
+                                            <span class='numbercart'> &nbsp;{{ cart.cart|length }}&nbsp; 
+                                        {% endif %}
+                                        </a>
                                 </li>
                                 <li>
                                     <a href="orders.php">Mijn bestellingen</a>

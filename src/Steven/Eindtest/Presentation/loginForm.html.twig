@@ -3,69 +3,72 @@
 {% block title %}Log in/Register{% endblock %}
 
 {% block content %}
-    <!--{{ email }} - {{ password }}-->
-    <h2>Log in</h2>
-    {% if error == "loginfailed" %}
-        <span class="errormessage">Foute inloggegevens</span>
-    {% endif %}
-    {% if not email is null %}
-        {% set emailvalue = email %}
+    {% if isLoggedIn %}
+        U bent al ingelogd
     {% else %}
-        {% set emailvalud = '' %}
-    {% endif %}
-    <form name="loginForm" action="login.php" method="post">
-        <div class="form-group">
-            <input class=form-control type="text" name="email" placeholder="email" value="{{ emailvalue }}" required>
-        </div>
-        <div class="form-group">
-            <input class="form-control" type="password" name="password" placeholder="wachtwoord" required>
-        </div>
-        <div class="form-group">
-            <button type="submit" name="loginSubmit" class="btn btn-default">Login</button>
-        </div>
-    </form>
+        <h2>Log in</h2>
+        {% if error == "loginfailed" %}
+            <span class="errormessage">Foute inloggegevens</span>
+        {% endif %}
+        {% if not email is null %}
+            {% set emailvalue = email %}
+        {% else %}
+            {% set emailvalud = '' %}
+        {% endif %}
+        <form name="loginForm" action="login.php" method="post">
+            <div class="form-group">
+                <input class=form-control type="text" name="email" placeholder="email" value="{{ emailvalue }}" required>
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="password" name="password" placeholder="wachtwoord" required>
+            </div>
+            <div class="form-group">
+                <button type="submit" name="loginSubmit" class="btn btn-default">Login</button>
+            </div>
+        </form>
 
-    <h2>Of registreer je nu...</h2>
-    {% if error == "cityerror" %}
-        <span class="errormessage">Gemeente bestaat niet</span>
-    {% elseif error == "customerexists" %}
-        <span class="errormessage">Er is al een account gekoppeld aan dit emailadres</span>
-    {% elseif error == "emptyfields" %}
-        <span class="errormessage">Alle velden zijn verplicht!</span>
+        <h2>Of registreer je nu...</h2>
+        {% if error == "cityerror" %}
+            <span class="errormessage">Gemeente bestaat niet</span>
+        {% elseif error == "customerexists" %}
+            <span class="errormessage">Er is al een account gekoppeld aan dit emailadres</span>
+        {% elseif error == "emptyfields" %}
+            <span class="errormessage">Alle velden zijn verplicht!</span>
         {% elseif error == "notemail" %}
-        <span class="errormessage">Gelieve een geldig email op te geven</span>
+            <span class="errormessage">Gelieve een geldig email op te geven</span>
         {% elseif error == "invalidfield" %}
-        <span class="errormessage">Naam en voornaam mogen enkel letters zijn en adres letters (of '-') + spatie + cijfers</span>
+            <span class="errormessage">Naam en voornaam mogen enkel letters zijn en adres letters (of '-') + spatie + cijfers</span>
+        {% endif %}
+
+        <form name="registerForm" action="login.php" method="post">
+            <div class="form-group">
+                <input type="text" name="email" placeholder="email" class="form-control" value="{{ user.email }}" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="name" placeholder="familienaam" class="form-control" value="{{user.name}}" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="firstname" placeholder="voornaam" class="form-control" value="{{user.firstname}}" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="address" placeholder="adres" class="form-control" value="{{user.address}}" required>
+            </div>
+            <div class="form-group">
+                <select name="city" class="form-control" required>
+                    <option disabled>Selecteer gemeente...</option>
+                    {% for city in cityList %}
+                        {% set selected ="" %}
+                        {% if user.city.name == city.name %}
+                            {% set selected = "selected" %}
+                        {% endif %}
+                        <option value="{{ city.id }}" {{ selected }}>{{ city.zipcode }} - {{ city.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" name="registerSubmit" class="btn btn-default">Registreer</button>
+
+
+        </form>
     {% endif %}
-
-    <form name="registerForm" action="login.php" method="post">
-        <div class="form-group">
-            <input type="text" name="email" placeholder="email" class="form-control" value="{{ user.email }}" required>
-        </div>
-        <div class="form-group">
-            <input type="text" name="name" placeholder="familienaam" class="form-control" value="{{user.name}}" required>
-        </div>
-        <div class="form-group">
-            <input type="text" name="firstname" placeholder="voornaam" class="form-control" value="{{user.firstname}}" required>
-        </div>
-        <div class="form-group">
-            <input type="text" name="address" placeholder="adres" class="form-control" value="{{user.address}}" required>
-        </div>
-        <div class="form-group">
-            <select name="city" class="form-control" required>
-                <option disabled>Selecteer gemeente...</option>
-                {% for city in cityList %}
-                    {% set selected ="" %}
-                    {% if user.city.name == city.name %}
-                        {% set selected = "selected" %}
-                    {% endif %}
-                  <option value="{{ city.id }}" {{ selected }}>{{ city.zipcode }} - {{ city.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-
-        <button type="submit" name="registerSubmit" class="btn btn-default">Registreer</button>
-
-
-    </form>
 {% endblock %}

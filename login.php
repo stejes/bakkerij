@@ -19,6 +19,7 @@ $cityList = $citySvc->getAll();
 $isLoggedIn = false;
 $error = null;
 $email = null;
+$cart = null;
 
 if (isset($_POST["registerSubmit"])) {
     /* maak een voorlopig userobject om data in formulier te kunnen bewaren */
@@ -84,6 +85,9 @@ if(isset($_COOKIE["email"])){
     $email = $_COOKIE["email"];
 }
 
-$view = $twig->render("loginForm.html.twig", array("cityList" => $cityList, "isLoggedIn" => $isLoggedIn, "error" => $error, "user" => $user, "email" => $email));
+if (isset($_SESSION["cart"])) {
+        $cart = unserialize($_SESSION["cart"]);
+    }
+$view = $twig->render("loginForm.html.twig", array("cityList" => $cityList, "isLoggedIn" => $isLoggedIn, "error" => $error, "user" => $user, "email" => $email, "cart" => $cart));
 print($view);
 

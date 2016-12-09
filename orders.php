@@ -11,6 +11,7 @@ use Steven\Eindtest\Exceptions\NonExistingOrderException;
 
 $isLoggedIn = false;
 $error = null;
+$cart = null;
 if (isset($_SESSION["email"])) {
     $isLoggedIn = true;
     
@@ -31,8 +32,10 @@ if (isset($_SESSION["email"])) {
     /* haal alle order van ingelogde user op */
     $orderSvc = new OrderService();
     $orderList = $orderSvc->getOrders($_SESSION["email"]);
-    
-    $view = $twig->render("my_orders.twig", array("orderlist" => $orderList, "isLoggedIn" => $isLoggedIn, "error" => $error));
+    if (isset($_SESSION["cart"])) {
+        $cart = unserialize($_SESSION["cart"]);
+    }
+    $view = $twig->render("my_orders.twig", array("orderlist" => $orderList, "isLoggedIn" => $isLoggedIn, "error" => $error, "cart" => $cart));
     print($view);
 } else {
     header("location: login.php");

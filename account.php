@@ -15,6 +15,7 @@ $isLoggedIn = false;
 $passwordString = null;
 $error = null;
 $success = null;
+$cart = null;
 if (isset($_SESSION["email"])) {
     $isLoggedIn = true;
     /* haal city en user op voor formulier */
@@ -39,7 +40,7 @@ if (isset($_SESSION["email"])) {
         } catch (InvalidFieldsException $ex) {
             $error = "invalidfield";
         }
-    /* bij wijzigen paswoord */
+        /* bij wijzigen paswoord */
     } else if (isset($_POST["passwordSubmit"])) {
         try {
             $userSvc->editPassword($_SESSION["email"], $_POST["oldpassword"], $_POST["password"], $_POST["password2"]);
@@ -50,7 +51,11 @@ if (isset($_SESSION["email"])) {
             $error = "passwordmatch";
         }
     }
-    $view = $twig->render("account.twig", array("user" => $user, "cityList" => $cityList, "isLoggedIn" => $isLoggedIn, "password" => $passwordString, "error" => $error, "success" => $success));
+
+    if (isset($_SESSION["cart"])) {
+        $cart = unserialize($_SESSION["cart"]);
+    }
+    $view = $twig->render("account.twig", array("user" => $user, "cityList" => $cityList, "isLoggedIn" => $isLoggedIn, "password" => $passwordString, "error" => $error, "success" => $success, "cart" => $cart));
     print($view);
 } else {
     header("location: login.php");
