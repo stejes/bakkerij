@@ -26,42 +26,42 @@
     {% if cart.cart|length > 0 %}
         {% set total = 0 %}
         {%  set iter = 0 %}
-        {% for cartline in cart.cart %}
-            <ul>
+        <ul>
+            {% for cartline in cart.cart %}
+
                 <li>
-                    <form action="order.php" method="post">
-                        {{ cartline.amount}} x {{ cartline.product.name }}  @ {{ cartline.product.price }}€ = {{ cartline.product.price * cartline.amount }}€
-                      
-                           <button type="submit" name="deleteLineSubmit" value="{{iter}}" class="btn btn-default">Wis item</button>
-                           {% set iter = iter+1 %}
+                    <form class="form-inline cartlist" action="order.php" method="post">
+                        <div class="form-control col-md-4">{{ cartline.amount}} x {{ cartline.product.name }}</div>
+                        <div class="form-control col-md-2">@ {{ cartline.product.price }}€</div>
+                        <div class="form-control col-md-2">= {{ cartline.product.price * cartline.amount }}€</div>
+
+                        <button class="form-control col-md-4" type="submit" name="deleteLineSubmit" value="{{iter}}" class="btn btn-default">Wis item</button>
+                        {% set iter = iter+1 %}
                     </form>
                     {% set total = total + cartline.product.price * cartline.amount %}
                 </li>
-            </ul>
-        {% endfor %}
-        Voorlopig totaal: {{ total }}
+
+            {% endfor %}
+            <li>&nbsp;</li>
+            <li>Voorlopig totaal: {{ total }}€</li>
+        </ul>
+        
         <div>
             <form name="cancel" action="order.php" method="post">
                 <button type="submit" name="cancelSubmit" class="btn btn-default">Alles wissen</button>
             </form>
         </div>
+        <form name="checkout" action="checkout.php" method="post">
+            <button type="submit" name="orderSubmit" class="btn btn-default">Naar afrekening</button>
+        </form>
 
     {% else %}
         Nog geen producten in winkelmandje.
     {% endif %}
 
-    <!--<ul>
-        <li>
-            Item 1 - aantal - wijzig - verwijder
-        </li>
-        <li>
-            Item 2 - aantal - wijzig - verwijder
-        </li>
-    </ul>-->
 
-    <form name="checkout" action="checkout.php" method="post">
-        <button type="submit" name="orderSubmit" class="btn btn-default">Naar afrekening</button>
-    </form>
+
+
 
 
 

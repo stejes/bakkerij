@@ -3,21 +3,35 @@
 {% block title %}Mijn bestellingen{% endblock %}
 
 {% block content %}
-    <h1>MIjn bestellingen: </h1>
+    <h1>Mijn bestellingen: </h1>
+    {% if orderlist|length == 0 %}
+        U hebt geen bestellingen.
+        {% else %}
     <ul>
         {% for order in orderlist %}
-            <li> {{order.id}} - {{order.date}}
+            <li> <form class="form-inline" action="orders.php" method="post">
+                    <div class="form-control"> Bestelling voor {{order.date}}</div>
+                    <button type="submit" name="cancelOrderSubmit" value="{{order.id}}" class="btn btn-default">Annuleer bestelling</button>
+                </form>
 
                 <ul>
+                    {% set totaal = 0%}
                     {% for orderline in order.orderlines %}
                         <li>
-                            {{orderline.product.name}} -- {{ orderline.amount }}(aantal)
+                            {{orderline.product.name}} x {{ orderline.amount }}
+                            {% set totaal = totaal + orderline.amount*orderline.product.price %}
                         </li>
+                        
                     {% endfor %}
+                    <li class="totalPrice">
+                        totale prijs: {{ totaal }}€
+                    </li>
+                    <li>&nbsp;</li>
                 </ul>
             </li>
         {% endfor %}
     </ul>
+    {% endif %}
 
 
     

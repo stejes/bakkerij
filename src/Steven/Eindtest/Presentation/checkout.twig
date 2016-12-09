@@ -4,28 +4,33 @@
 
 {% block content %}
     <h1>Uw bestelling: </h1>
-    {% set total = 0 %}
-    {% for cartline in cart.cart %}
-        <ul>
-            <li>
-                {{ cartline.amount}} x {{ cartline.product.name }}  @ {{ cartline.product.price }}€ = {{ cartline.product.price * cartline.amount }}€
-                {% set total = total + cartline.product.price * cartline.amount %}
-            </li>
-        </ul>
-    {% endfor %}
+    {% if cart.cart|length == 0 %}
+        Uw winkelkar is leeg.
+    {% else %}
+        {% set total = 0 %}
+        {% for cartline in cart.cart %}
+            <ul>
+                <li>
+                    {{ cartline.amount}} x {{ cartline.product.name }}  @ {{ cartline.product.price }}€ = {{ cartline.product.price * cartline.amount }}€
+                    {% set total = total + cartline.product.price * cartline.amount %}
+                </li>
+            </ul>
+        {% endfor %}
 
-    
-    Totaal: {{ total }}€
-    
-    <form action="order.php">
-        <input type="submit" name="" value="wijzig bestelling">
-    </form>
-    {{ error }}
-    <form action="checkout.php" method="post">
-        Kies een datum (yyyy-mm-dd): 
-        <input type="date" name="date">
-        <input type="submit" name="confirmSubmit" value="Bevestig bestelling">
-    </form>
+
+        <span class="totalPrice">Totaal: {{ total }}€</span>
+
+        <form action="order.php">
+            <button  type="submit" name="" class="btn btn-default">Wijzig bestelling</button>
+        </form>
+        {{ error }}
+        <form action="checkout.php" method="post">
+            Kies een datum (yyyy-mm-dd): 
+            <input type="date" name="date" >
+            <button type="submit" name="confirmSubmit"  class="btn btn-default">Bevestig bestelling</button>
+        </form>
+
+    {% endif %}
 
 
 
