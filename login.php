@@ -28,6 +28,7 @@ if (isset($_POST["registerSubmit"])) {
         if ($passwordString) {
             $_SESSION["email"] = $_POST["email"];
             $_SESSION["password"] = $passwordString;
+            setcookie($email, $_SESSION["email"]);
             header("location: account.php");
             exit(0);
         }
