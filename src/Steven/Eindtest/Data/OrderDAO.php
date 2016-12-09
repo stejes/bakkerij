@@ -8,6 +8,7 @@ use Steven\Eindtest\Entities\Orderline;
 use Steven\Eindtest\Business\ProductService;
 use Steven\Eindtest\Exceptions\OrderExistsException;
 use Steven\Eindtest\Exceptions\NonExistingOrderException;
+use Steven\Eindtest\Exceptions\UnauthorizedException;
 use PDO;
 
 class OrderDAO {

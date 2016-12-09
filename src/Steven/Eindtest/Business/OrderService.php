@@ -39,6 +39,12 @@ class OrderService {
     public function cancel($orderId){
         $orderDao = new OrderDAO();
         $order = $orderDao->getById($orderId);
+        $date = date_create(date('Y-m-d'));
+        $dateOrder = date_create(date($order->getDate()));
+        $dateDiff = date_diff($dateOrder, $date)->format('%R%a');
+        if($dateDiff > 0){
+            throw new DateOutOfBoundsException();
+        }
         $orderDao->delete($order);
     }
 

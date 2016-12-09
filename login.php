@@ -16,6 +16,7 @@ $citySvc = new CityService();
 $cityList = $citySvc->getAll();
 $isLoggedIn = false;
 $error = null;
+$email = null;
 if (isset($_POST["registerSubmit"])) {
     //print "register";
     $user = User::create(0, $_POST["name"], $_POST["firstname"], $_POST["address"], $_POST["city"], $_POST["email"], null, 0);
@@ -51,6 +52,7 @@ if (isset($_POST["registerSubmit"])) {
             //if ($isValid) {
             if ($isValid) {
                 $_SESSION["email"] = $_POST["email"];
+                setcookie("email", $_SESSION["email"]);
                 header("location: order.php");
                 exit(0);
             }
@@ -73,7 +75,11 @@ if (isset($_SESSION["email"])) {
 if (!isset($user)) {
     $user = null;
 }
+if(isset($_COOKIE["email"])){
+    $email = $_COOKIE["email"];
+}
+
 //$view = $twig->render("loginForm.html.twig", array("cityList" => $cityList, "email" => $_POST["email"], "password" => $passwordString));
-$view = $twig->render("loginForm.html.twig", array("cityList" => $cityList, "isLoggedIn" => $isLoggedIn, "error" => $error, "user" => $user));
+$view = $twig->render("loginForm.html.twig", array("cityList" => $cityList, "isLoggedIn" => $isLoggedIn, "error" => $error, "user" => $user, "email" => $email));
 print($view);
 
