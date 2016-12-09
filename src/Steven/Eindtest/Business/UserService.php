@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace Steven\Eindtest\Business;
 
 use Steven\Eindtest\Exceptions\EmptyFieldsException;
@@ -13,22 +11,18 @@ use Steven\Eindtest\Exceptions\InvalidFieldsException;
 use Steven\Eindtest\Data\UserDAO;
 use Steven\Eindtest\Data\CityDAO;
 
-
 class UserService {
 
     public function registerUser($email, $name, $firstname, $address, $city) {
         /* check op lege velden */
         if ($email == "" || $name == "" || $firstname == "" || $address == "" || $city == "") {
             throw new EmptyFieldsException();
-        } 
-        else if(! filter_var($email, FILTER_VALIDATE_EMAIL)){ //check of email geldig is
+        } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) { //check of email geldig is
             throw new NotAnEmailException();
         }
-        /* check of naam en voornaam enkel letters zijn en adres letters (of'-') plus spatie plus cijfers */
-        else if(!preg_match("/^[a-zA-Z]*$/", $firstname) || !preg_match("/^[a-zA-Z]*$/", $name) || !preg_match("/^([a-z- ]*)\s+([0-9]+)$/i", $address)){
+        /* check of naam en voornaam enkel letters zijn en adres letters (of'-') plus spatie plus cijfers */ else if (!preg_match("/^[a-zA-Z]*$/", $firstname) || !preg_match("/^[a-zA-Z]*$/", $name) || !preg_match("/^([a-z- ]*)\s+([0-9]+)$/i", $address)) {
             throw new InvalidFieldsException();
-        }
-        else { //genereer paswoord, maak user aan
+        } else { //genereer paswoord, maak user aan
             $passwordString = $this->generatePassword();
             $password = sha1($passwordString);
             $userDao = new UserDAO();
@@ -70,9 +64,8 @@ class UserService {
         /* check op lege velden */
         if ($name == "" || $firstname == "" || $address == "" || $cityId == "") {
             throw new EmptyFieldsException();
-        } 
-        /* check of naam en voornaam enkel letters zijn en adres letters (of'-') plus spatie plus cijfers */
-        else if(!preg_match("/^[a-zA-Z]*$/", $firstname) || !preg_match("/^[a-zA-Z]*$/", $name) || !preg_match("/^([a-z- ]*)\s+([0-9]+)$/i", $address)){
+        }
+        /* check of naam en voornaam enkel letters zijn en adres letters (of'-') plus spatie plus cijfers */ else if (!preg_match("/^[a-zA-Z]*$/", $firstname) || !preg_match("/^[a-zA-Z]*$/", $name) || !preg_match("/^([a-z- ]*)\s+([0-9]+)$/i", $address)) {
             throw new InvalidFieldsException();
         }
         $userDao = new UserDAO();
@@ -87,19 +80,17 @@ class UserService {
     }
 
     public function editPassword($email, $oldpassword, $password, $password2) {
-        if ($password == $password2) {
-            $userDao = new UserDao();
-            $user = $userDao->getByEmail($email);
-            if ($user->getPassword() == sha1($oldpassword)) {
-                $user->setPassword(sha1($password));
-                $userDao->update($user);
+        $userDao = new UserDao();
+        $user = $userDao->getByEmail($email);
+        if ($user->getPassword() == sha1($oldpassword)) {
+            if ($password != $password2) {
+                throw new PasswordsDontMatchException();
             }
-            else{
-                throw new WrongPasswordException();
-            }
-        }
-        else{
-            throw new PasswordsDontMatchException();
+
+            $user->setPassword(sha1($password));
+            $userDao->update($user);
+        } else {
+            throw new WrongPasswordException();
         }
     }
 

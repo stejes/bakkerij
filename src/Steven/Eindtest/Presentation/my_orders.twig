@@ -19,16 +19,22 @@
                     </form>
 
                     <ul>
-                        {% set totaal = 0%}
+                        {% set total = 0%}
                         {% for orderline in order.orderlines %}
-                            <li>
-                                {{orderline.product.name}} x {{ orderline.amount }}
-                                {% set totaal = totaal + orderline.amount*orderline.product.price %}
-                            </li>
+
+                            <form class="form-inline cartlist" action="order.php" method="post">
+                                <div class="form-control col-md-4">{{ orderline.amount}} x {{ orderline.product.name }}</div>
+                                <div class="form-control col-md-2">@ {{ orderline.product.price }}€</div>
+                                <div class="form-control col-md-2">= {{ orderline.product.price * orderline.amount }}€</div>
+
+
+
+                            </form>
+                            {% set total = total + orderline.product.price * orderline.amount %}
 
                         {% endfor %}
                         <li class="totalPrice">
-                            totale prijs: {{ totaal }}€
+                            totale prijs: {{ total }}€
                         </li>
                         <li>&nbsp;</li>
                     </ul>
