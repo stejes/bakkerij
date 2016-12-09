@@ -1,10 +1,6 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 
 namespace Steven\Eindtest\Business;
 
@@ -13,24 +9,26 @@ use Steven\Eindtest\Exceptions\PasswordsDontMatchException;
 use Steven\Eindtest\Exceptions\WrongPasswordException;
 use Steven\Eindtest\Exceptions\LoginFailedException;
 use Steven\Eindtest\Exceptions\NotAnEmailException;
+use Steven\Eindtest\Exceptions\InvalidFieldsException;
 use Steven\Eindtest\Data\UserDAO;
 use Steven\Eindtest\Data\CityDAO;
 
-/**
- * Description of UserService
- *
- * @author steven.jespers
- */
+
 class UserService {
 
     public function registerUser($email, $name, $firstname, $address, $city) {
+        /* check op lege velden */
         if ($email == "" || $name == "" || $firstname == "" || $address == "" || $city == "") {
             throw new EmptyFieldsException();
         } 
-        else if(! filter_var($email, FILTER_VALIDATE_EMAIL)){
+        else if(! filter_var($email, FILTER_VALIDATE_EMAIL)){ //check of email geldig is
             throw new NotAnEmailException();
         }
-        else {
+        /* check of naam en voornaam enkel letters zijn en adres letters (of'-') plus spatie plus cijfers */
+        else if(!preg_match("/^[a-zA-Z]*$/", $firstname) || !preg_match("/^[a-zA-Z]*$/", $name) || !preg_match("/^([a-z- ]*)\s+([0-9]+)$/i", $address)){
+            throw new InvalidFieldsException();
+        }
+        else { //genereer paswoord, maak user aan
             $passwordString = $this->generatePassword();
             $password = sha1($passwordString);
             $userDao = new UserDAO();
@@ -43,6 +41,7 @@ class UserService {
     }
 
     public function generatePassword() {
+        /* paswoord generatie, 6 random cijfers en/of hoofdletters */
         $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
         $randomString = '';
@@ -53,9 +52,8 @@ class UserService {
     }
 
     public function checkLogin($email, $password) {
+        /* check of user bestaat, paswoord juist is en user niet geblokkeerd is */
         $userDao = new UserDAO();
-        //print "user" . $user;
-        //print "passding: " . sha1($password);
         $user = $userDao->getByEmail($email);
         if (!is_null($user) && $user->getIsBlocked() == false && $user->getPassword() == sha1($password)) {
             return true;
@@ -69,6 +67,14 @@ class UserService {
     }
 
     public function editData($email, $firstname, $name, $address, $cityId) {
+        /* check op lege velden */
+        if ($name == "" || $firstname == "" || $address == "" || $cityId == "") {
+            throw new EmptyFieldsException();
+        } 
+        /* check of naam en voornaam enkel letters zijn en adres letters (of'-') plus spatie plus cijfers */
+        else if(!preg_match("/^[a-zA-Z]*$/", $firstname) || !preg_match("/^[a-zA-Z]*$/", $name) || !preg_match("/^([a-z- ]*)\s+([0-9]+)$/i", $address)){
+            throw new InvalidFieldsException();
+        }
         $userDao = new UserDAO();
         $user = $userDao->getByEmail($email);
         $user->setFirstname($firstname);

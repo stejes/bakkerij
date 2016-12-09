@@ -8,12 +8,13 @@ use Steven\Eindtest\Exceptions\DateOutOfBoundsException;
 use Steven\Eindtest\Exceptions\UnauthorizedException;
 use Steven\Eindtest\Exceptions\NonExistingOrderException;
 
-//print "blabla";
+
 $isLoggedIn = false;
 $error = null;
 if (isset($_SESSION["email"])) {
     $isLoggedIn = true;
     
+    /* annuleer een gemaakte bestelling */
     if (isset($_POST["cancelOrderSubmit"])) {
         try{
         $orderSvc = new OrderService();
@@ -23,9 +24,11 @@ if (isset($_SESSION["email"])) {
         }catch(UnauthorizedException $ex){
             $error = "Niet toegestaan";
         }catch(DateOutOfBoundsException $ex){
-            $error = "Je kan ten laatste de dag zelf annuleren";
+            $error = "Je kan slechts tot de dag voor afhaling annuleren";
         }
     }
+    
+    /* haal alle order van ingelogde user op */
     $orderSvc = new OrderService();
     $orderList = $orderSvc->getOrders($_SESSION["email"]);
     

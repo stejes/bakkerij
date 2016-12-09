@@ -7,6 +7,8 @@ use Steven\Eindtest\Business\UserService;
 use Steven\Eindtest\Business\CityService;
 use Steven\Eindtest\Exceptions\WrongPasswordException;
 use Steven\Eindtest\Exceptions\PasswordsDontMatchException;
+use Steven\Eindtest\Exceptions\EmptyFieldsException;
+use Steven\Eindtest\Exceptions\InvalidFieldsException;
 
 //print "blabla";
 $isLoggedIn = false;
@@ -15,27 +17,36 @@ $error = null;
 $success = null;
 if (isset($_SESSION["email"])) {
     $isLoggedIn = true;
+    /* haal city en user op voor formulier */
     $citySvc = new CityService();
     $cityList = $citySvc->getAll();
     $userSvc = new UserService();
     $user = $userSvc->getByEmail($_SESSION["email"]);
-    //print_r($user);
-    if(isset($_SESSION["password"])){
+
+    /* bij eerste inlog na registreren toon gegenereerd paswoord */
+    if (isset($_SESSION["password"])) {
         $passwordString = $_SESSION["password"];
         unset($_SESSION["password"]);
     }
 
-
+    /* bij wijzigen gegevens */
     if (isset($_POST["accountSubmit"])) {
-        $userSvc->editData($_SESSION["email"], $_POST["firstname"], $_POST["name"], $_POST["address"], $_POST["city"]);
-        $success = "datasuccess";
+        try {
+            $userSvc->editData($_SESSION["email"], $_POST["firstname"], $_POST["name"], $_POST["address"], $_POST["city"]);
+            $success = "datasuccess";
+        } catch (EmptyFieldsException $ex) {
+            $error = "emptyfield";
+        } catch (InvalidFieldsException $ex) {
+            $error = "invalidfield";
+        }
+    /* bij wijzigen paswoord */
     } else if (isset($_POST["passwordSubmit"])) {
-        try{
-        $userSvc->editPassword($_SESSION["email"], $_POST["oldpassword"], $_POST["password"], $_POST["password2"]);
-        $success = "passsuccess";
-        }catch(WrongPasswordException $ex){
+        try {
+            $userSvc->editPassword($_SESSION["email"], $_POST["oldpassword"], $_POST["password"], $_POST["password2"]);
+            $success = "passsuccess";
+        } catch (WrongPasswordException $ex) {
             $error = "wrong pass";
-        }catch(PasswordsDontMatchException $ex){
+        } catch (PasswordsDontMatchException $ex) {
             $error = "passwordmatch";
         }
     }

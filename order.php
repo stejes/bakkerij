@@ -11,8 +11,7 @@ use Steven\Eindtest\Exceptions\NonExistingProductException;
 use Steven\Eindtest\Exceptions\AmountOutOfBoundsException;
 
 session_start();
-//print "blabla";
-//print $_POST["deleteLineSubmit"];
+
 $isLoggedIn = false;
 $error = null;
 if (isset($_SESSION["email"])) {
@@ -20,9 +19,11 @@ if (isset($_SESSION["email"])) {
     $isLoggedIn = true;
     $productSvc = new ProductService();
     $productList = $productSvc->getAll();
+    /* wis alle items uit winkelwagen */
     if (isset($_POST["cancelSubmit"])) {
         unset($_SESSION["cart"]);
     }
+    /* als user niet geblokkeerd is, maak nieuwe winkelwagen aan of voeg toe aan bestaande */
     if (isset($_POST["orderAdd"])) {
         if (isset($_POST["amount"]) && isset($_POST["product"])) {
             $userSvc = new UserService();
@@ -51,6 +52,8 @@ if (isset($_SESSION["email"])) {
             }
         }
     }
+    
+    /* delete een itemlijn uit winkelwagen */
     if (isset($_POST["deleteLineSubmit"])) {
         $cart = unserialize($_SESSION["cart"]);
         $cart->deleteLine($_POST["deleteLineSubmit"]);
@@ -59,9 +62,6 @@ if (isset($_SESSION["email"])) {
 
     if (isset($_SESSION["cart"])) {
         $cart = unserialize($_SESSION["cart"]);
-
-        //$_SESSION["cart"] = serialize($cart);
-        //print_r($cart);
     }
     $view = $twig->render("orderForm.twig", array("cart" => $cart, "productList" => $productList, "isLoggedIn" => $isLoggedIn, "error" => $error));
 

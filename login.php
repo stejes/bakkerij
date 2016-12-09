@@ -12,23 +12,28 @@ use Steven\Eindtest\Exceptions\CustomerExistsException;
 use Steven\Eindtest\Exceptions\LoginFailedException;
 use Steven\Eindtest\Exceptions\NonExistingCityException;
 use Steven\Eindtest\Exceptions\NotAnEmailException;
+use Steven\Eindtest\Exceptions\InvalidFieldsException;
 
 $citySvc = new CityService();
 $cityList = $citySvc->getAll();
 $isLoggedIn = false;
 $error = null;
 $email = null;
+
 if (isset($_POST["registerSubmit"])) {
-    //print "register";
-    //$user = User::create(0, $_POST["name"], $_POST["firstname"], $_POST["address"], $_POST["city"], $_POST["email"], null, 0);
-    //print_r($user);
+    /* maak een voorlopig userobject om data in formulier te kunnen bewaren */
+    $citySvc = new CityService();
+    $city = $citySvc->getById($_POST["city"]);
+    $user = User::create(0, $_POST["name"], $_POST["firstname"], $_POST["address"], $city, $_POST["email"], null, 0);
+    
+    /* probeer te registreren, geef voorlopig paswoord mee aan sessie bij succes en log user in */
     try {
         $userSvc = new UserService();
         $passwordString = $userSvc->registerUser($_POST["email"], $_POST["name"], $_POST["firstname"], $_POST["address"], $_POST["city"]);
         if ($passwordString) {
             $_SESSION["email"] = $_POST["email"];
             $_SESSION["password"] = $passwordString;
-            setcookie($email, $_SESSION["email"]);
+            setcookie("email", $_SESSION["email"]);
             header("location: account.php");
             exit(0);
         }
@@ -43,30 +48,26 @@ if (isset($_POST["registerSubmit"])) {
         $error = "cityerror";
     } catch (NotAnEmailException $ex){
         $error = "notemail";
+    } catch (InvalidFieldsException $ex){
+        $error = "invalidfield";
     }
+    /* inloggen */
 } else if (isset($_POST["loginSubmit"])) {
-    //print "in eerste if";
     if (isset($_POST["email"]) && isset($_POST["password"])) {
         try {
             $userSvc = new UserService();
-            //$isValid = $userSvc->checkLogin($_POST["email"], $_POST["password"]);
             $isValid = $userSvc->checkLogin($_POST["email"], $_POST["password"]);
-            // print "in tweede if";
-            //print $isValid;
-            //if ($isValid) {
             if ($isValid) {
                 $_SESSION["email"] = $_POST["email"];
                 setcookie("email", $_SESSION["email"]);
                 header("location: order.php");
                 exit(0);
             }
-            
-            //}
         } catch (LoginFailedException $ex) {
-            //header("location: login.php?error=loginfailed");
             $error = "loginfailed";
         }
     }
+    /* uitloggen */
 } else if (isset($_GET["action"]) && $_GET["action"] == "logout") {
     session_unset();
     header("location: index.php");
@@ -76,15 +77,13 @@ if (isset($_SESSION["email"])) {
     $isLoggedIn = true;
 }
 
-
 if (!isset($user)) {
     $user = null;
 }
 if(isset($_COOKIE["email"])){
     $email = $_COOKIE["email"];
 }
-print_r($user);
-//$view = $twig->render("loginForm.html.twig", array("cityList" => $cityList, "email" => $_POST["email"], "password" => $passwordString));
+
 $view = $twig->render("loginForm.html.twig", array("cityList" => $cityList, "isLoggedIn" => $isLoggedIn, "error" => $error, "user" => $user, "email" => $email));
 print($view);
 

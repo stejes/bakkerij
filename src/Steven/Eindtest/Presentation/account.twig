@@ -18,6 +18,10 @@
         <span class="errormessage">U hebt het verkeerde paswoord opgegeven</span>
     {% elseif error == "passwordmatch"%}
         <span class="errormessage">De paswoorden zijn niet gelijk</span>
+        {% elseif error == "emptyfield"%}
+        <span class="errormessage">Alle velden zijn verplicht</span>
+        {% elseif error == "invalidfield"%}
+        <span class="errormessage">Naam en voornaam mogen enkel letters zijn en adres letters (of '-') + spatie + cijfers</span>
     {% endif %}
 
     <h4>Wijzig paswoord</h4>
@@ -64,7 +68,7 @@
 
                 {% for city in cityList %}
                     {% set selected ="" %}
-                    {% if user.city.zipcode == city.zipcode %}
+                    {% if user.city.name == city.name %}
                         {% set selected = "selected" %}
                     {% endif %}
                     <option value="{{ city.id }}" {{ selected }}>

@@ -34,6 +34,8 @@
         <span class="errormessage">Alle velden zijn verplicht!</span>
         {% elseif error == "notemail" %}
         <span class="errormessage">Gelieve een geldig email op te geven</span>
+        {% elseif error == "invalidfield" %}
+        <span class="errormessage">Naam en voornaam mogen enkel letters zijn en adres letters (of '-') + spatie + cijfers</span>
     {% endif %}
 
     <form name="registerForm" action="login.php" method="post">
@@ -49,16 +51,15 @@
         <div class="form-group">
             <input type="text" name="address" placeholder="adres" class="form-control" value="{{user.address}}" required>
         </div>
-        {{ user.city }}
         <div class="form-group">
             <select name="city" class="form-control" required>
                 <option disabled>Selecteer gemeente...</option>
                 {% for city in cityList %}
                     {% set selected ="" %}
-                    {% if user.city.zipcode == city.zipcode %}
+                    {% if user.city.name == city.name %}
                         {% set selected = "selected" %}
                     {% endif %}
-                    <option value="{{ city.id }} {{ selected }}">{{ city.zipcode }} - {{ city.name }}</option>
+                  <option value="{{ city.id }}" {{ selected }}>{{ city.zipcode }} - {{ city.name }}</option>
                 {% endfor %}
             </select>
         </div>

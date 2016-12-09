@@ -10,19 +10,22 @@ use Steven\Eindtest\Business\UserService;
 
 $isLoggedIn = false;
 $error = null;
-//print "blabla";
 
 if (isset($_SESSION["email"])) {
     $cart = null;
     $isLoggedIn = true;
+    /* als er items in winkelwagentje haal deze op */
     if (isset($_SESSION["cart"])) {
         $cart = unserialize($_SESSION["cart"]);
+        /* na klik op bevestigen */
         if (isset($_POST["confirmSubmit"])) {
             $userSvc = new UserService();
             $user = $userSvc->getByEmail($_SESSION["email"]);
+            /* check of user geblokkeerd is */
             if ($user->getIsBlocked()) {
                 $error = "Uw account is geblokkeerd, contacteer de winkelverantwoordelijke";
             } else {
+                /* bevestig de bestelling of catch exceptions */
                 try {
                     $orderSvc = new OrderService();
                     $orderSvc->confirm($cart, $_SESSION["email"], $_POST["date"]);
